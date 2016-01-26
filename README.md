@@ -1,7 +1,7 @@
-`Dockerfile` link
-=================
+Dockerfile link
+===============
 
-- [`linshare-backend-dockerfile`(*master/Dockerfile*)](https://github.com/linagora/linshare-backend-dockerfile/blob/master/Dockerfile)
+- [`linshare-backend-dockerfile`](https://github.com/linagora/linshare-backend-dockerfile/blob/master/Dockerfile)
 
 What is Linshare?
 =================
@@ -127,4 +127,4 @@ Official Linshare documentation is available here : [Linshare Configuration Guid
 Issues
 ------
 
-If you have any problems with or questions about this image, please contact us through a [GitHub issue](https://github.com/linagora/linshare/issues).
+If you have any problems with or questions about this image, please contact us through a [GitHub issue](https://github.com/linagora/linshare-backend/issues).
