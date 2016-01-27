@@ -97,6 +97,8 @@ You can set a custom version number on the command-line by using the --build-arg
 CHANNEL argument can be set to `releases` or `snapshots`.
 Stable `releases` channel is selected by default.
 
+Version is for Linshare-core version. It's set to latest version by default.
+
 ```console
 $ docker build --build-arg VERSION=1.11.5 CHANNEL=snapshots -t linshare-backend .
 ```
