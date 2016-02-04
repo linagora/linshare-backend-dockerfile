@@ -57,7 +57,7 @@ Run
 To start using this image with the defaults settings, you can run the following commands :
 
 ```console
-$ docker run -d --rm -p 8080:8080 linagora/linshare:1.11
+$ docker run -d -p 8080:8080 linagora/linshare-backend:1.11.4
 ```
 
 And if any changes are necessary you can set the new values by passing them as follow :
@@ -85,7 +85,7 @@ Data persistency on Docker host is provided by the Docker volume runtime flag (-
 To enable it, at any time, run this image like as in the following example :
 
 ```console
-$ docker run -d --rm -p 8080:8080 -v /var/lib/linshare:/var/lib/linshare linagora/linshare-backend:1.11
+$ docker run -d -p 8080:8080 -v /var/lib/linshare:/var/lib/linshare linagora/linshare-backend:1.11.4
 ```
 
 Build
