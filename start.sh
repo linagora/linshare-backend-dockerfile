@@ -1,10 +1,17 @@
-#! /bin/bash -ex
+#! /bin/bash -e
 
 # Check mandatory parameters
+[[ -z "$POSTGRES_USER" || -z "$POSTGRES_PASS" ]] && {
+    echo "POSTGRES_USER or POSTGRES_PASS is missing"
+    echo "Startup interrupted"
+    exit 1
+}
+
+# Check important parameters
 [ -z "$SMTP_HOST" ] && echo "SMTP_HOST missing : Will use ls_smtp"
 [ -z "$POSTGRES_HOST" ] && echo "POSTGRES_HOST missing : Will use ls_postgres"
 
-[ -z "$POSTGRES_URL" ] && echo "Warning : POSTGRES_URL parameter is deprecated. Please use POSTGRES_HOST instead."
+[ ! -z "$POSTGRES_URL" ] && echo "Warning : POSTGRES_URL parameter is deprecated. Please use POSTGRES_HOST instead."
 
 # DEFAULT VALUES
 
