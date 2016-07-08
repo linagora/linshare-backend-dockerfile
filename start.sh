@@ -11,7 +11,12 @@
 [ -z "$SMTP_HOST" ] && echo "SMTP_HOST missing : Will use opensmtp"
 [ -z "$POSTGRES_HOST" ] && echo "POSTGRES_HOST missing : Will use postgres"
 
-[ ! -z "$POSTGRES_URL" ] && echo "Warning : POSTGRES_URL parameter is deprecated. Please use POSTGRES_HOST instead."
+# Check for deprecated parameters
+[ -z "$POSTGRES_URL" ] && {
+    echo "POSTGRES_URL parameter is deprecated. Please use POSTGRES_HOST instead."
+    echo "Startup interrupted"
+    exit 1
+}
 
 # DEFAULT VALUES
 
