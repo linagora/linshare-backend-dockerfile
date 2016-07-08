@@ -8,17 +8,17 @@
 }
 
 # Check important parameters
-[ -z "$SMTP_HOST" ] && echo "SMTP_HOST missing : Will use ls_smtp"
-[ -z "$POSTGRES_HOST" ] && echo "POSTGRES_HOST missing : Will use ls_postgres"
+[ -z "$SMTP_HOST" ] && echo "SMTP_HOST missing : Will use opensmtp"
+[ -z "$POSTGRES_HOST" ] && echo "POSTGRES_HOST missing : Will use postgres"
 
 [ ! -z "$POSTGRES_URL" ] && echo "Warning : POSTGRES_URL parameter is deprecated. Please use POSTGRES_HOST instead."
 
 # DEFAULT VALUES
 
-smtp_host="ls_smtp"
+smtp_host="opensmtp"
 smtp_port=25
 smtp_auth_needed="false"
-postgres_host="ls_postgres"
+postgres_host="postgres"
 postgres_port=5432
 clamav_port=3310
 
