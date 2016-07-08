@@ -30,21 +30,21 @@ To be fully operational, Linshare requires several components :
 Configuration
 -------------
 
-You can expose the above related settings through the following environment variables :
+You can configure the above related settings through the following environment variables :
 
-| Environment variable      | Default value                                                                                                |
-|---------------------------|--------------------------------------------------------------------------------------------------------------|
-|SMTP_HOST                  |opensmtp                                                                                                      |
-|SMTP_PORT                  |25                                                                                                            |
-|SMTP_USER                  |                                                                                                              |
-|SMTP_PASS                  |                                                                                                              |
-|POSTGRES_HOST              |postgres                                                                                                      |
-|POSTGRES_PORT              |5432                                                                                                          |
-|POSTGRES_USER              |                                                                                                              |
-|POSTGRES_PASS              |                                                                                                              |
-|CLAMAV_HOST                |                                                                                                              |
-|CLAMAV_PORT                |3310                                                                                                          |
-|JAVA_OPTS                  |                                                                                                              |
+| Environment variable      |
+|---------------------------|
+|SMTP_HOST                  |
+|SMTP_PORT                  |
+|SMTP_USER                  |
+|SMTP_PASS                  |
+|POSTGRES_HOST              |
+|POSTGRES_PORT              |
+|POSTGRES_USER              |
+|POSTGRES_PASS              |
+|CLAMAV_HOST                |
+|CLAMAV_PORT                |
+|JAVA_OPTS                  |
 
 <br/>
 

@@ -1,31 +1,47 @@
 #! /bin/bash -e
 
-# Check mandatory parameters
-[[ -z "$POSTGRES_USER" || -z "$POSTGRES_PASS" ]] && {
-    echo "POSTGRES_USER or POSTGRES_PASS is missing"
-    echo "Startup interrupted"
-    exit 1
-}
-
-# Check important parameters
-[ -z "$SMTP_HOST" ] && echo "SMTP_HOST missing : Will use opensmtp"
-[ -z "$POSTGRES_HOST" ] && echo "POSTGRES_HOST missing : Will use postgres"
-
 # Check for deprecated parameters
-[ -z "$POSTGRES_URL" ] && {
+[ ! -z "$POSTGRES_URL" ] && {
     echo "POSTGRES_URL parameter is deprecated. Please use POSTGRES_HOST instead."
     echo "Startup interrupted"
     exit 1
 }
 
-# DEFAULT VALUES
+# Check for unused parameters
+[ -z "$SMTP_HOST" ] && {
+    echo "ERROR : No SMTP host configured, interrupting startup"
+    exit 1
+}
 
-smtp_host="opensmtp"
-smtp_port=25
-smtp_auth_needed="false"
-postgres_host="postgres"
-postgres_port=5432
-clamav_port=3310
+[ -z "$SMTP_PORT" ] && {
+    echo "ERROR : No SMTP port configured, interrupting startup"
+    exit 1
+}
+
+[ -z "$POSTGRES_HOST" ] && {
+    echo "ERROR : No POSTGRES host configured, interrupting startup"
+    exit 1
+}
+
+[ -z "$POSTGRES_PORT" ] && {
+    echo "ERROR : No POSTGRES port configured, interrupting startup"
+    exit 1
+}
+
+[ -z "$POSTGRES_USER" ] && {
+    echo "ERROR : no POSTGRES_USER configured, interrupting startup"
+    exit 1
+}
+
+[ -z "$POSTGRES_PASS" ] && {
+    echo "ERROR : no POSTGRES_PASS configured, interrupting startup"
+    exit 1
+}
+
+[ -z "$CLAMAV_PORT" ] && {
+    echo "ERROR : No CLAMAV_PORT configured, interrupting startup"
+    exit 1
+}
 
 # OPENSMTPD SETTINGS
 [ -z "$SMTP_HOST" ] || smtp_host="$SMTP_HOST"
