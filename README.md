@@ -34,15 +34,14 @@ You can expose the above related settings through the following environment vari
 
 | Environment variable      | Default value                                                                                                |
 |---------------------------|--------------------------------------------------------------------------------------------------------------|
-|SMTP_HOST                  |                                                                                                              |
+|SMTP_HOST                  |opensmtp                                                                                                      |
 |SMTP_PORT                  |25                                                                                                            |
 |SMTP_USER                  |                                                                                                              |
 |SMTP_PASS                  |                                                                                                              |
-|POSTGRES_USER              |user                                                                                                          |
-|POSTGRES_PASS              |password                                                                                                      |
-|POSTGRES_URL (deprecated)  |                                                                                                              |
-|POSTGRES_HOST              |                                                                                                              |
+|POSTGRES_HOST              |postgres                                                                                                      |
 |POSTGRES_PORT              |5432                                                                                                          |
+|POSTGRES_USER              |                                                                                                              |
+|POSTGRES_PASS              |                                                                                                              |
 |CLAMAV_HOST                |                                                                                                              |
 |CLAMAV_PORT                |3310                                                                                                          |
 |JAVA_OPTS                  |                                                                                                              |
@@ -57,7 +56,7 @@ Run
 To start using this image with the defaults settings, you can run the following commands :
 
 ```console
-$ docker run -d -p 8080:8080 linagora/linshare-backend:1.11.4
+$ docker run -d -p 8080:8080 linagora/linshare-backend
 ```
 
 And if any changes are necessary you can set the new values by passing them as follow :
@@ -74,7 +73,7 @@ $ docker run -it --rm -p 8080:8080 \
 -e CLAMAV_HOST=clamav.linshare.com \
 -e CLAMAV_PORT=4410 \
 -e JAVA_OPTS="-Xms1024m" \
-linagora/linshare-backend:1.11
+linagora/linshare-backend
 ```
 
 Data persistency
