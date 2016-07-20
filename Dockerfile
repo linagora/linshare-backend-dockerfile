@@ -4,7 +4,7 @@ MAINTAINER MAINTAINER Thomas Sarboni <tsarboni@linagora.com>
 
 EXPOSE 8080
 
-ARG VERSION="1.12.2"
+ARG VERSION="1.12.3"
 ARG CHANNEL="releases"
 ARG EXT="com"
 
