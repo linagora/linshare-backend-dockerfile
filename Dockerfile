@@ -8,9 +8,7 @@ ARG VERSION="1.12.2"
 ARG CHANNEL="releases"
 ARG EXT="com"
 
-RUN echo "$CHANNEL" | grep "releases" 2>&1 > /dev/null \
- && URL="https://nexus.linagora.${EXT}/service/local/artifact/maven/content?r=linshare-${CHANNEL}&g=org.linagora.linshare&a=linshare-core&v=${VERSION}" \
- || URL="https://nexus.linagora.${EXT}/service/local/artifact/maven/content?r=linshare-${CHANNEL}&g=org.linagora.linshare&a=linshare-core&v=${VERSION}-SNAPSHOT"; \
+RUN URL="https://nexus.linagora.${EXT}/service/local/artifact/maven/content?r=linshare-${CHANNEL}&g=org.linagora.linshare&a=linshare-core&v=${VERSION}"; \
  wget --no-check-certificate --progress=bar:force:noscroll \
  -O webapps/linshare.war "${URL}&p=war" \
  && wget --no-check-certificate --progress=bar:force:noscroll \
