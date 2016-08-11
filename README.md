@@ -42,6 +42,8 @@ You can configure the above related settings through the following environment v
 |POSTGRES_PORT              |
 |POSTGRES_USER              |
 |POSTGRES_PASS              |
+|MONGODB_HOST               |
+|MONGODB_PORT               |
 |CLAMAV_HOST                |
 |CLAMAV_PORT                |
 |JAVA_OPTS                  |
