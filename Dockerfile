@@ -1,15 +1,16 @@
-FROM tomcat:7
+FROM tomcat:8-jre8
 
-MAINTAINER MAINTAINER Thomas Sarboni <tsarboni@linagora.com>
+MAINTAINER Frédéric MARTIN <fmartin@linagora.com>
 
 EXPOSE 8080
 
-ARG VERSION="1.12.3"
-ARG CHANNEL="releases"
+ARG VERSION="2.0.0-SNAPSHOT"
+ARG CHANNEL="snapshots"
+
 ARG EXT="com"
 
 RUN URL="https://nexus.linagora.${EXT}/service/local/artifact/maven/content?r=linshare-${CHANNEL}&g=org.linagora.linshare&a=linshare-core&v=${VERSION}"; \
- wget --no-check-certificate --progress=bar:force:noscroll \
+ wget --progress=bar:force:noscroll \
  -O webapps/linshare.war "${URL}&p=war" \
  && wget --no-check-certificate --progress=bar:force:noscroll \
  -O linshare.war.sha1 "${URL}&p=war.sha1" \
