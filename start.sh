@@ -28,6 +28,16 @@
     exit 1
 }
 
+[ -z "$MONGODB_HOST" ] && {
+    echo "ERROR : No MONGODB host configured, interrupting startup"
+    exit 1
+}
+
+[ -z "$MONGODB_PORT" ] && {
+    echo "ERROR : No MONGODB port configured, interrupting startup"
+    exit 1
+}
+
 [ -z "$POSTGRES_USER" ] && {
     echo "ERROR : no POSTGRES_USER configured, interrupting startup"
     exit 1
@@ -128,6 +138,10 @@ else
         [ -z "$postgres_host" ] \
         || sed -i "s@\(.*url.*value=\"\).*\(\".*\)@\1jdbc:postgresql://${postgres_host}:${postgres_port}/linshare_data\2@" $target2
     fi
+
+    sed -i "s@linshare.mongo.host=.*@linshare.mongo.host=${MONGODB_HOST}@" $target
+    sed -i "s@linshare.mongo.port=.*@linshare.mongo.port=${MONGODB_PORT}@" $target
+
 fi
 
 if [ $custom_log4j -eq 1 ]; then
