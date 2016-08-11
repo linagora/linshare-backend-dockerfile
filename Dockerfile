@@ -4,8 +4,8 @@ MAINTAINER Frédéric MARTIN <fmartin@linagora.com>
 
 EXPOSE 8080
 
-ARG VERSION="2.0.0-SNAPSHOT"
-ARG CHANNEL="snapshots"
+ARG VERSION="1.12.3"
+ARG CHANNEL="releases"
 
 ARG EXT="com"
 
