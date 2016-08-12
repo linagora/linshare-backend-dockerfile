@@ -1,6 +1,6 @@
-FROM tomcat:7
+FROM tomcat:7-jre7
 
-MAINTAINER MAINTAINER Thomas Sarboni <tsarboni@linagora.com>
+MAINTAINER LinShare <linshare@linagora.com>
 
 EXPOSE 8080
 
