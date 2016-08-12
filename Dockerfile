@@ -1,10 +1,10 @@
-FROM tomcat:7
+FROM tomcat:7-jre7
 
-MAINTAINER MAINTAINER Thomas Sarboni <tsarboni@linagora.com>
+MAINTAINER LinShare <linshare@linagora.com>
 
 EXPOSE 8080
 
-ARG VERSION="1.12.2"
+ARG VERSION="1.11.5"
 ARG CHANNEL="releases"
 ARG EXT="com"
 
