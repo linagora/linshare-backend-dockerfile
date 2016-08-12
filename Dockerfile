@@ -1,12 +1,11 @@
 FROM tomcat:8-jre8
 
-MAINTAINER Frédéric MARTIN <fmartin@linagora.com>
+MAINTAINER LinShare <linshare@linagora.com>
 
 EXPOSE 8080
 
-ARG VERSION="1.12.3"
+ARG VERSION="RELEASE"
 ARG CHANNEL="releases"
-
 ARG EXT="com"
 
 RUN URL="https://nexus.linagora.${EXT}/service/local/artifact/maven/content?r=linshare-${CHANNEL}&g=org.linagora.linshare&a=linshare-core&v=${VERSION}"; \
