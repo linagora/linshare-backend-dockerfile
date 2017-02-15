@@ -159,5 +159,19 @@ else
     sed -i "s@log4j.category.org.linagora.linshare.*@log4j.category.org.linagora.linshare=warn@" ${conf_dir}/log4j.properties
 fi
 
+
+if [ -f "${conf_dir}/linshare.extra.properties" ] ; then
+    if [ ! -f "${conf_dir}/linshare.extra.properties.added" ] ; then
+        echo "Adding extra properties ..."
+        cat ${conf_dir}/linshare.extra.properties
+        echo ...
+        cat ${conf_dir}/linshare.extra.properties  >> ${target}
+        touch ${conf_dir}/linshare.extra.properties.added
+    fi
+else
+    echo "There is no extra properties to set. Skipping."
+fi
+
+
 /bin/bash /usr/local/tomcat/bin/catalina.sh run
 
