@@ -141,6 +141,8 @@ else
 
     sed -i "s@linshare.mongo.host=.*@linshare.mongo.host=${MONGODB_HOST}@" $target
     sed -i "s@linshare.mongo.port=.*@linshare.mongo.port=${MONGODB_PORT}@" $target
+    sed -i "s@linshare.gridfs.smallfiles.host=.*@linshare.gridfs.smallfiles.host=${MONGODB_HOST}@" $target
+    sed -i "s@linshare.gridfs.smallfiles.port=.*@linshare.gridfs.smallfiles.port=${MONGODB_PORT}@" $target
 
 fi
 
