@@ -32,25 +32,36 @@ Configuration
 
 You can configure the above related settings through the following environment variables :
 
-| Environment variable      |
-|---------------------------|
-|SMTP_HOST                  |
-|SMTP_PORT                  |
-|SMTP_USER                  |
-|SMTP_PASS                  |
-|POSTGRES_HOST              |
-|POSTGRES_PORT              |
-|POSTGRES_USER              |
-|POSTGRES_PASS              |
-|MONGODB_HOST               |
-|MONGODB_PORT               |
-|CLAMAV_HOST                |
-|CLAMAV_PORT                |
-|JAVA_OPTS                  |
-
+| Environment variable              | Description
+|-----------------------------------|---------------------------------------------------------------------------------------------------
+|SMTP_HOST                          | smtp host
+|SMTP_PORT                          | smtp port
+|SMTP_USER                          | smtp user
+|SMTP_PASS                          | smtp password
+|POSTGRES_HOST                      | postgres host
+|POSTGRES_PORT                      | postgres port
+|POSTGRES_USER                      | postgres user
+|POSTGRES_PASS                      | postgres password
+|POSTGRES_DATABASE                  | postgres database with default value "linshare"
+|MONGODB_HOST                       | mongodb host
+|MONGODB_PORT                       | mongodb port
+|MONGODB_USER                       | mongodb user
+|MONGODB_PASS                       | mongodb password
+|CLAMAV_HOST                        | clamav host
+|CLAMAV_PORT                        | clamav port
+|JAVA_OPTS                          | java env variables
+|REPLICA_SET (optional)             | replica-set for "linshare" database (if not set MONGODB_HOST and MONGODB_PORT will be used)
+|REPLICA_SET_BIGFILES (optional)    | replica-set for "linshare-files" database (if not set MONGODB_HOST and MONGODB_PORT will be used)
+|REPLICA_SET_SMALLFILES (optional)  | replica-set for "linshare-bigfiles" database (if not set MONGODB_HOST and MONGODB_PORT will be used)
 <br/>
 
-Example value for *POSTGRES_URL* : jdbc:postgresql://localhost:5432/linshare
+We add three mongodb environment variables in orther to specify the mongodb replica-set for each database.
+
+Each environment variable must be set like this: "ip-adress-of-first-mongodb:mongodb-port,ip-adress-of-second-mongodb:mongodb-port,...".
+
+For exemple if we had a replica-set of three mongodb replication for the "linshare-bigfiles" database we can add: 
+
+`REPLICA_SET=10.129.0.3:27017,10.129.0.4:27017,10.129.0.5:27017`
 
 Run
 ---

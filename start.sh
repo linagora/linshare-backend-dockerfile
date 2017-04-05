@@ -53,29 +53,25 @@
     exit 1
 }
 
+
 # OPENSMTPD SETTINGS
-[ -z "$SMTP_HOST" ] || smtp_host="$SMTP_HOST"
-[ -z "$SMTP_PORT" ] || smtp_port="$SMTP_PORT"
-[ -z "$SMTP_USER" ] || smtp_user="$SMTP_USER"
-[ -z "$SMTP_PASS" ] || smtp_password="$SMTP_PASS"
+
 [ -z "$SMTP_USER" ] || smtp_auth_needed="true"
 [ -z "$SMTP_PASS" ] || smtp_auth_needed="true"
-echo "smtp host : $smtp_host"
-echo "smtp port : $smtp_port"
+
+echo "smtp host : $SMTP_HOST"
+echo "smtp port : $SMTP_PORT"
 echo "smtp auth needed : $smtp_auth_needed"
+echo "postgres host : $POSTGRES_HOST"
+echo "postgres port : $POSTGRES_PORT"
+echo "postgres user : $POSTGRES_USER"
+echo "postgres database : $POSTGRES_DATABASE"
+echo "mongodb host : $MONGODB_HOST"
+echo "mongodb port : $MONGODB_PORT"
+echo "clamav host : $CLAMAV_HOST"
+echo "clamav port : $CLAMAV_PORT"
 
-# POSTGRESQL SETTINGS
-[ -z "$POSTGRES_HOST" ] || postgres_host="$POSTGRES_HOST"
-[ -z "$POSTGRES_USER" ] || postgres_username="$POSTGRES_USER"
-[ -z "$POSTGRES_PASS" ] || postgres_password="$POSTGRES_PASS"
-[ -z "$POSTGRES_PORT" ] || postgres_port="$POSTGRES_PORT"
-[ -z "$POSTGRES_URL" ]  || postgres_url="$POSTGRES_URL"
-
-
-# CLAMAV SETTINGS
-[ -z "$CLAMAV_HOST" ] || clamav_host="$CLAMAV_HOST"
-[ -z "$CLAMAV_PORT" ] || clamav_port="$CLAMAV_PORT"
-
+ 
 # LINSHARE OPTIONS (WARNING : modifying these settings is at your own risks)
 src_dir=webapps/linshare/WEB-INF/classes
 conf_dir=/etc/linshare
@@ -111,38 +107,40 @@ else
     cp ${src_dir}/linshare.properties.sample ${conf_dir}/linshare.properties
 
     target="${conf_dir}/linshare.properties"
-    target2="${data_dir}/repository/workspaces/default/workspace.xml"
 
     # Uncommenting clamav related configuration if needed
-    [ -z "$smtp_host" ]         || sed -i "s@mail.smtp.host.*@mail.smtp.host=${smtp_host}@" $target
-    [ -z "$smtp_port" ]         || sed -i "s@mail.smtp.port.*@mail.smtp.port=${smtp_port}@" $target
-    [ -z "$smtp_user" ]         || sed -i "s@mail.smtp.user.*@mail.smtp.user=${smtp_user}@" $target
-    [ -z "$smtp_password" ]     || sed -i "s@mail.smtp.password.*@mail.smtp.password=${smtp_password}@" $target
-    [ -z "$smtp_auth_needed" ]  || sed -i "s@mail.smtp.auth.needed.*@mail.smtp.auth.needed=true@" $target
-    [ -z "$postgres_username" ] || sed -i "s@linshare.db.username.*@linshare.db.username=${postgres_username}@" $target
-    [ -z "$postgres_password" ] || sed -i "s@linshare.db.password.*@linshare.db.password=${postgres_password}@" $target
-    [ -z "$postgres_url" ]      || sed -i "s@.*linshare.db.url=jdbc:postgresql.*@linshare.db.url=${postgres_url}@" $target
-    [ -z "$postgres_host" ]     || sed -i "s@linshare.db.url=jdbc:postgresql.*@linshare.db.url=jdbc:postgresql://${postgres_host}:${postgres_port}/linshare@" $target
-    [ -z "$clamav_host" ]        || sed -i "s@.*virusscanner.clamav.host.*@virusscanner.clamav.host=${clamav_host}@" $target
-    [ -z "$clamav_port" ]        || sed -i "s@.*virusscanner.clamav.port.*@virusscanner.clamav.port=${clamav_port}@" $target
+
+    [ -z "$SMTP_USER" ]         || sed -i 's@mail.smtp.user.*@mail.smtp.user=${SMTP_USER}@' $target
+    [ -z "$SMTP_PASS" ]     || sed -i 's@mail.smtp.password.*@mail.smtp.password=${SMTP_PASS}@' $target
+    [ -z "$smtp_auth_needed" ]  || sed -i 's@mail.smtp.auth.needed.*@mail.smtp.auth.needed=true@' $target
+    [ -z "$CLAMAV_HOST" ]        || sed -i 's@.*virusscanner.clamav.host.*@virusscanner.clamav.host=${CLAMAV_HOST}@' $target
+
+    sed -i 's@mail.smtp.host.*@mail.smtp.host=${SMTP_HOST}@' $target
+    sed -i 's@mail.smtp.port.*@mail.smtp.port=${SMTP_PORT}@' $target
+    sed -i 's@linshare.db.username.*@linshare.db.username=${POSTGRES_USER}@' $target
+    sed -i 's@linshare.db.password.*@linshare.db.password=${POSTGRES_PASS}@' $target
+    sed -i 's@linshare.db.url=jdbc:postgresql.*@linshare.db.url=jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE:linshare}@' $target
+    sed -i 's@.*virusscanner.clamav.port.*@virusscanner.clamav.port=${CLAMAV_PORT}@' $target
     sed -i "s@linshare.logo.webapp.visible.*@linshare.logo.webapp.visible=false@" $target
     echo -e "linshare.display.licenceTerm=false\n" >> $target
 
-    if [ -f $target2 ]; then
-        [ -z "$postgres_username" ] \
-        || sed -i "s@\(.*user.*value=\"\).*\(\".*\)@\1${postgres_username}\2@" $target2
-        [ -z "$postgres_password" ] \
-        || sed -i "s@\(.*password.*value=\"\).*\(\".*\)@\1${postgres_password}\2@" $target2
-        [ -z "$postgres_url" ] \
-        || sed -i "s@\(.*url.*value=\"\).*\(\".*\)@\1${postgres_url}_data\2@" $target2
-        [ -z "$postgres_host" ] \
-        || sed -i "s@\(.*url.*value=\"\).*\(\".*\)@\1jdbc:postgresql://${postgres_host}:${postgres_port}/linshare_data\2@" $target2
-    fi
+    sed -i 's@linshare.mongo.host=.*@linshare.mongo.host=${MONGODB_HOST}@' $target
+    sed -i 's@linshare.mongo.gridfs.smallfiles.host=.*@linshare.mongo.gridfs.smallfiles.host=${MONGODB_HOST}@' $target
+    sed -i 's@linshare.mongo.gridfs.bigfiles.host=.*@linshare.mongo.gridfs.bigfiles.host=${MONGODB_HOST}@' $target
+    sed -i 's@linshare.mongo.port=.*@linshare.mongo.port=${MONGODB_PORT}@' $target
+    sed -i 's@linshare.mongo.gridfs.smallfiles.port=.*@linshare.mongo.gridfs.smallfiles.port=${MONGODB_PORT}@' $target
+    sed -i 's@linshare.mongo.gridfs.bigfiles.port=.*@linshare.mongo.gridfs.bigfiles.port=${MONGODB_PORT}@' $target
+    sed -i 's@linshare.mongo.user=.*@linshare.mongo.user=${MONGODB_USER}@' $target
+    sed -i 's@linshare.mongo.gridfs.smallfiles.user=.*@linshare.mongo.gridfs.smallfiles.user=${MONGODB_USER}@' $target
+    sed -i 's@linshare.mongo.gridfs.bigfiles.user=.*@linshare.mongo.gridfs.bigfiles.user=${MONGODB_USER}@' $target
+    sed -i 's@linshare.mongo.password=.*@linshare.mongo.password=${MONGODB_PASS}@' $target
+    sed -i 's@linshare.mongo.gridfs.smallfiles.password=.*@linshare.mongo.gridfs.smallfiles.password=${MONGODB_PASS}@' $target
+    sed -i 's@linshare.mongo.gridfs.bigfiles.password=.*@linshare.mongo.gridfs.bigfiles.password=${MONGODB_PASS}@' $target
 
-    sed -i "s@linshare.mongo.host=.*@linshare.mongo.host=${MONGODB_HOST}@" $target
-    sed -i "s@linshare.mongo.port=.*@linshare.mongo.port=${MONGODB_PORT}@" $target
-    sed -i "s@linshare.gridfs.smallfiles.host=.*@linshare.gridfs.smallfiles.host=${MONGODB_HOST}@" $target
-    sed -i "s@linshare.gridfs.smallfiles.port=.*@linshare.gridfs.smallfiles.port=${MONGODB_PORT}@" $target
+    echo -e 'linshare.mongo.replicatset=${REPLICA_SET}\n' >> $target
+    echo -e 'linshare.mongo.gridfs.bigfiles.replicatset=${REPLICA_SET_BIGFILES}\n' >> $target
+    echo -e 'linshare.mongo.gridfs.smallfiles.replicatset=${REPLICA_SET_SMALLFILES}\n' >> $target
+
 
 fi
 
