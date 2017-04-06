@@ -68,6 +68,7 @@ echo "postgres user : $POSTGRES_USER"
 echo "postgres database : $POSTGRES_DATABASE"
 echo "mongodb host : $MONGODB_HOST"
 echo "mongodb port : $MONGODB_PORT"
+echo "mongodb user : $MONGODB_USER"
 echo "clamav host : $CLAMAV_HOST"
 echo "clamav port : $CLAMAV_PORT"
 
@@ -113,7 +114,7 @@ else
     [ -z "$SMTP_USER" ]         || sed -i 's@mail.smtp.user.*@mail.smtp.user=${SMTP_USER}@' $target
     [ -z "$SMTP_PASS" ]     || sed -i 's@mail.smtp.password.*@mail.smtp.password=${SMTP_PASS}@' $target
     [ -z "$smtp_auth_needed" ]  || sed -i 's@mail.smtp.auth.needed.*@mail.smtp.auth.needed=true@' $target
-    [ -z "$CLAMAV_HOST" ]        || sed -i 's@.*virusscanner.clamav.host.*@virusscanner.clamav.host=${CLAMAV_HOST}@' $target
+    sed -i 's@.*virusscanner.clamav.host.*@virusscanner.clamav.host=${CLAMAV_HOST:127.0.0.1}@' $target
 
     sed -i 's@mail.smtp.host.*@mail.smtp.host=${SMTP_HOST}@' $target
     sed -i 's@mail.smtp.port.*@mail.smtp.port=${SMTP_PORT}@' $target
@@ -121,8 +122,6 @@ else
     sed -i 's@linshare.db.password.*@linshare.db.password=${POSTGRES_PASS}@' $target
     sed -i 's@linshare.db.url=jdbc:postgresql.*@linshare.db.url=jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE:linshare}@' $target
     sed -i 's@.*virusscanner.clamav.port.*@virusscanner.clamav.port=${CLAMAV_PORT}@' $target
-    sed -i "s@linshare.logo.webapp.visible.*@linshare.logo.webapp.visible=false@" $target
-    echo -e "linshare.display.licenceTerm=false\n" >> $target
 
     sed -i 's@linshare.mongo.host=.*@linshare.mongo.host=${MONGODB_HOST}@' $target
     sed -i 's@linshare.mongo.gridfs.smallfiles.host=.*@linshare.mongo.gridfs.smallfiles.host=${MONGODB_HOST}@' $target
@@ -137,9 +136,10 @@ else
     sed -i 's@linshare.mongo.gridfs.smallfiles.password=.*@linshare.mongo.gridfs.smallfiles.password=${MONGODB_PASS}@' $target
     sed -i 's@linshare.mongo.gridfs.bigfiles.password=.*@linshare.mongo.gridfs.bigfiles.password=${MONGODB_PASS}@' $target
 
-    echo -e 'linshare.mongo.replicatset=${REPLICA_SET}\n' >> $target
-    echo -e 'linshare.mongo.gridfs.bigfiles.replicatset=${REPLICA_SET_BIGFILES}\n' >> $target
-    echo -e 'linshare.mongo.gridfs.smallfiles.replicatset=${REPLICA_SET_SMALLFILES}\n' >> $target
+    echo -e "linshare.display.licenceTerm=false\n" >> $target
+    echo -e 'linshare.mongo.replicatset=${REPLICA_SET:""}\n' >> $target
+    echo -e 'linshare.mongo.gridfs.bigfiles.replicatset=${REPLICA_SET_BIGFILES:""}\n' >> $target
+    echo -e 'linshare.mongo.gridfs.smallfiles.replicatset=${REPLICA_SET_SMALLFILES:""}\n' >> $target
 
 
 fi
