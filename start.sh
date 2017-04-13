@@ -137,9 +137,9 @@ else
     sed -i 's@linshare.mongo.gridfs.bigfiles.password=.*@linshare.mongo.gridfs.bigfiles.password=${MONGODB_PASS}@' $target
 
     echo -e "linshare.display.licenceTerm=false\n" >> $target
-    echo -e 'linshare.mongo.replicatset=${REPLICA_SET:""}\n' >> $target
-    echo -e 'linshare.mongo.gridfs.bigfiles.replicatset=${REPLICA_SET_BIGFILES:""}\n' >> $target
-    echo -e 'linshare.mongo.gridfs.smallfiles.replicatset=${REPLICA_SET_SMALLFILES:""}\n' >> $target
+    echo -e 'linshare.mongo.replicatset=${REPLICA_SET:-""}\n' >> $target
+    echo -e 'linshare.mongo.gridfs.bigfiles.replicatset=${REPLICA_SET_BIGFILES:-""}\n' >> $target
+    echo -e 'linshare.mongo.gridfs.smallfiles.replicatset=${REPLICA_SET_SMALLFILES:-""}\n' >> $target
 
 
 fi
