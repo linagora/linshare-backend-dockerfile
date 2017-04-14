@@ -8,6 +8,10 @@ ARG VERSION="2.0.0-beta3"
 ARG CHANNEL="releases"
 ARG EXT="com"
 
+ENV REPLICA_SET=
+ENV REPLICA_SET_BIGFILES=
+ENV REPLICA_SET_SMALLFILES=
+
 RUN URL="https://nexus.linagora.${EXT}/service/local/artifact/maven/content?r=linshare-${CHANNEL}&g=org.linagora.linshare&a=linshare-core&v=${VERSION}"; \
  wget --no-check-certificate --progress=bar:force:noscroll \
  -O webapps/linshare.war "${URL}&p=war" \
