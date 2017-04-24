@@ -80,8 +80,8 @@ data_dir=/var/lib/linshare
 
 # Allow to tweak JVM settings
 [ -z "$JAVA_OPTS" ] || java_opts="$JAVA_OPTS"
-export JAVA_OPTS="-Djava.awt.headless=true -Xms512m -Xmx1536m -XX:-UseSplitVerifier
-                  -XX:+UseConcMarkSweepGC -XX:MaxPermSize=256m
+export JAVA_OPTS="-Djava.awt.headless=true -Xms512m -Xmx1536m
+                  -XX:+UseConcMarkSweepGC
                   -Dlinshare.config.path=file:${conf_dir}/
                   -Dlog4j.configuration=file:${conf_dir}/log4j.properties
                   ${java_opts}"
