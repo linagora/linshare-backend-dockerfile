@@ -18,8 +18,8 @@ RUN URL="https://nexus.linagora.${EXT}/service/local/artifact/maven/content?r=li
  && wget --no-check-certificate --progress=bar:force:noscroll \
  -O linshare.war.sha1 "${URL}&p=war.sha1" \
  && sed -i 's#^\(.*\)#\1\twebapps/linshare.war#' linshare.war.sha1 \
- && sha1sum -c linshare.war.sha1 --quiet && rm -f linshare.war.sha1
-
+ && sha1sum -c linshare.war.sha1 --quiet && rm -f linshare.war.sha1 \
+ && sed -i "/xom/i\jclouds-bouncycastle-1.9.2.jar,bcprov-*.jar,\\\ " /usr/local/tomcat/conf/catalina.properties
 COPY start.sh /usr/local/bin/start.sh
 
 CMD ["/usr/local/bin/start.sh"]
