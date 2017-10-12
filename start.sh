@@ -43,16 +43,11 @@
     exit 1
 }
 
+
 # OPENSMTPD SETTINGS
-[ -z "$SMTP_HOST" ] || smtp_host="$SMTP_HOST"
-[ -z "$SMTP_PORT" ] || smtp_port="$SMTP_PORT"
-[ -z "$SMTP_USER" ] || smtp_user="$SMTP_USER"
-[ -z "$SMTP_PASS" ] || smtp_password="$SMTP_PASS"
+
 [ -z "$SMTP_USER" ] || smtp_auth_needed="true"
 [ -z "$SMTP_PASS" ] || smtp_auth_needed="true"
-echo "smtp host : $smtp_host"
-echo "smtp port : $smtp_port"
-echo "smtp auth needed : $smtp_auth_needed"
 
 # POSTGRESQL SETTINGS
 [ -z "$POSTGRES_HOST" ] || postgres_host="$POSTGRES_HOST"
@@ -62,9 +57,16 @@ echo "smtp auth needed : $smtp_auth_needed"
 [ -z "$POSTGRES_URL" ]  || postgres_url="$POSTGRES_URL"
 
 
-# CLAMAV SETTINGS
-[ -z "$CLAMAV_HOST" ] || clamav_host="$CLAMAV_HOST"
-[ -z "$CLAMAV_PORT" ] || clamav_port="$CLAMAV_PORT"
+echo "smtp host : $SMTP_HOST"
+echo "smtp port : $SMTP_PORT"
+echo "smtp auth needed : $smtp_auth_needed"
+echo "postgres host : $POSTGRES_HOST"
+echo "postgres port : $POSTGRES_PORT"
+echo "postgres user : $POSTGRES_USER"
+echo "postgres database : $POSTGRES_DATABASE"
+echo "clamav host : $CLAMAV_HOST"
+echo "clamav port : $CLAMAV_PORT"
+
 
 # LINSHARE OPTIONS (WARNING : modifying these settings is at your own risks)
 src_dir=webapps/linshare/WEB-INF/classes
@@ -104,17 +106,20 @@ else
     target2="${data_dir}/repository/workspaces/default/workspace.xml"
 
     # Uncommenting clamav related configuration if needed
-    [ -z "$smtp_host" ]         || sed -i "s@mail.smtp.host.*@mail.smtp.host=${smtp_host}@" $target
-    [ -z "$smtp_port" ]         || sed -i "s@mail.smtp.port.*@mail.smtp.port=${smtp_port}@" $target
-    [ -z "$smtp_user" ]         || sed -i "s@mail.smtp.user.*@mail.smtp.user=${smtp_user}@" $target
-    [ -z "$smtp_password" ]     || sed -i "s@mail.smtp.password.*@mail.smtp.password=${smtp_password}@" $target
-    [ -z "$smtp_auth_needed" ]  || sed -i "s@mail.smtp.auth.needed.*@mail.smtp.auth.needed=true@" $target
+
+    [ -z "$SMTP_USER" ]         || sed -i 's@mail.smtp.user.*@mail.smtp.user=${SMTP_USER}@' $target
+    [ -z "$SMTP_PASS" ]     || sed -i 's@mail.smtp.password.*@mail.smtp.password=${SMTP_PASS}@' $target
+    [ -z "$smtp_auth_needed" ]  || sed -i 's@mail.smtp.auth.needed.*@mail.smtp.auth.needed=true@' $target
+    sed -i 's@.*virusscanner.clamav.host.*@virusscanner.clamav.host=${CLAMAV_HOST:127.0.0.1}@' $target
+
+    sed -i 's@mail.smtp.host.*@mail.smtp.host=${SMTP_HOST}@' $target
+    sed -i 's@mail.smtp.port.*@mail.smtp.port=${SMTP_PORT}@' $target
     [ -z "$postgres_username" ] || sed -i "s@linshare.db.username.*@linshare.db.username=${postgres_username}@" $target
     [ -z "$postgres_password" ] || sed -i "s@linshare.db.password.*@linshare.db.password=${postgres_password}@" $target
     [ -z "$postgres_url" ]      || sed -i "s@.*linshare.db.url=jdbc:postgresql.*@linshare.db.url=${postgres_url}@" $target
     [ -z "$postgres_host" ]     || sed -i "s@linshare.db.url=jdbc:postgresql.*@linshare.db.url=jdbc:postgresql://${postgres_host}:${postgres_port}/linshare@" $target
-    [ -z "$clamav_host" ]        || sed -i "s@.*virusscanner.clamav.host.*@virusscanner.clamav.host=${clamav_host}@" $target
-    [ -z "$clamav_port" ]        || sed -i "s@.*virusscanner.clamav.port.*@virusscanner.clamav.port=${clamav_port}@" $target
+    sed -i 's@.*virusscanner.clamav.port.*@virusscanner.clamav.port=${CLAMAV_PORT}@' $target
+
     sed -i "s@linshare.logo.webapp.visible.*@linshare.logo.webapp.visible=false@" $target
     echo -e "linshare.display.licenceTerm=false\n" >> $target
 
@@ -144,6 +149,20 @@ else
     sed -i "s@log4j.category.org.linagora.linkit.*@log4j.category.org.linagora.linkit=warn@" ${conf_dir}/log4j.properties
     sed -i "s@log4j.category.org.linagora.linshare.*@log4j.category.org.linagora.linshare=warn@" ${conf_dir}/log4j.properties
 fi
+
+
+if [ -f "${conf_dir}/linshare.extra.properties" ] ; then
+    if [ ! -f "${conf_dir}/linshare.extra.properties.added" ] ; then
+        echo "Adding extra properties ..."
+        cat ${conf_dir}/linshare.extra.properties
+        echo ...
+        cat ${conf_dir}/linshare.extra.properties  >> ${target}
+        touch ${conf_dir}/linshare.extra.properties.added
+    fi
+else
+    echo "There is no extra properties to set. Skipping."
+fi
+
 
 /bin/bash /usr/local/tomcat/bin/catalina.sh run
 
