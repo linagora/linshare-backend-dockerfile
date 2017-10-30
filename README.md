@@ -54,7 +54,8 @@ You can configure the above related settings through the following environment v
 |REPLICA_SET_BIGFILES (optional)    | replica-set for "linshare-files" database (if not set MONGODB_HOST and MONGODB_PORT will be used)
 |REPLICA_SET_SMALLFILES (optional)  | replica-set for "linshare-bigfiles" database (if not set MONGODB_HOST and MONGODB_PORT will be used)
 |SPRING_PROFILES_ACTIVE             | default value is 'default,jcloud,mongo'. To enable sso, use 'sso,jcloud,mongo'
-|SSO_IP_LIST                        | Trusted list of sso server ip.
+|SSO_IP_LIST_ENABLE                 | enable trusted list of sso server ip. (default=false)
+|SSO_IP_LIST                        | Trusted list of sso server ip. (default="")
 <br/>
 
 We add three mongodb environment variables in orther to specify the mongodb replica-set for each database.
