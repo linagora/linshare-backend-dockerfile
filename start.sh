@@ -136,6 +136,7 @@ else
     sed -i 's@linshare.mongo.gridfs.smallfiles.password=.*@linshare.mongo.gridfs.smallfiles.password=${MONGODB_PASS}@' $target
     sed -i 's@linshare.mongo.gridfs.bigfiles.password=.*@linshare.mongo.gridfs.bigfiles.password=${MONGODB_PASS}@' $target
     sed -i 's@sso.header.allowfrom=.*@sso.header.allowfrom=${SSO_IP_LIST:-""}@' $target
+    sed -i 's@sso.header.allowfrom.enable=.*@sso.header.allowfrom.enable=${SSO_IP_LIST_ENABLE:-"false"}@' $target
 
     echo -e "linshare.display.licenceTerm=false\n" >> $target
     echo -e 'linshare.mongo.replicatset=${REPLICA_SET:-""}\n' >> $target
