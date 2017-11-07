@@ -53,6 +53,35 @@
     exit 1
 }
 
+[ -z "${STORAGE_MODE}" ] && {
+    export STORAGE_MODE=${STORAGE_MODE:-"filesystem"}
+    echo "Warning : No STORAGE_MODE configured, default value will be \"${STORAGE_MODE}\""
+}
+
+[ -z "${STORAGE_BUCKET}" ] && {
+    export STORAGE_BUCKET=${STORAGE_BUCKET:-"e0531829-8a75-49f8-bb30-4539574d66c7"}
+    echo "Warning : No STORAGE_BUCKET configured, default value will be \"${STORAGE_BUCKET}\""
+}
+
+if [ -z "${STORAGE_FILESYSTEM_DIR}" ] ; then
+  export STORAGE_FILESYSTEM_DIR=${STORAGE_FILESYSTEM_DIR:-"/var/lib/linshare/filesystemstorage"}
+  echo "Warning : No STORAGE_FILESYSTEM_DIR configured, default value will be \"${STORAGE_FILESYSTEM_DIR}\""
+fi
+
+if [ "${STORAGE_MODE}" == "swift-keystone" -a -z "${STORAGE_SWIFT_IDENTITY}" ] ; then
+    echo "ERROR : No STORAGE_SWIFT_IDENTITY configured, interrupting startup"
+    exit 1
+fi
+
+if [ ${STORAGE_MODE} == "swift-keystone" -a -z "${STORAGE_SWIFT_CREDENTIAL}" ] ; then
+    echo "ERROR : No STORAGE_SWIFT_CREDENTIAL configured, interrupting startup"
+    exit 1
+fi
+
+if [ ${STORAGE_MODE} == "swift-keystone" -a -z "${STORAGE_SWIFT_ENDPOINT}" ] ; then
+    echo "ERROR : No STORAGE_SWIFT_ENDPOINT configured, interrupting startup"
+    exit 1
+fi
 
 # OPENSMTPD SETTINGS
 
@@ -71,6 +100,12 @@ echo "mongodb port : $MONGODB_PORT"
 echo "mongodb user : $MONGODB_USER"
 echo "clamav host : $CLAMAV_HOST"
 echo "clamav port : $CLAMAV_PORT"
+echo "storage mode : ${STORAGE_MODE}"
+echo "storage bucket : ${STORAGE_BUCKET}"
+echo "storage filesystem directory : ${STORAGE_FILESYSTEM_DIR}"
+echo "storage swift identity : ${STORAGE_SWIFT_IDENTITY}"
+echo "storage swift credential : ${STORAGE_SWIFT_CREDENTIAL}"
+echo "storage swift endpoint : ${STORAGE_SWIFT_ENDPOINT}"
 
  
 # LINSHARE OPTIONS (WARNING : modifying these settings is at your own risks)
@@ -137,6 +172,12 @@ else
     sed -i 's@linshare.mongo.gridfs.bigfiles.password=.*@linshare.mongo.gridfs.bigfiles.password=${MONGODB_PASS}@' $target
     sed -i 's@sso.header.allowfrom=.*@sso.header.allowfrom=${SSO_IP_LIST:-""}@' $target
     sed -i 's@sso.header.allowfrom.enable=.*@sso.header.allowfrom.enable=${SSO_IP_LIST_ENABLE:-"false"}@' $target
+    sed -i 's@linshare.documents.storage.mode=.*@linshare.documents.storage.mode=${STORAGE_MODE}@' $target
+    sed -i 's@linshare.documents.storage.bucket=.*@linshare.documents.storage.bucket=${STORAGE_BUCKET}@' $target
+    sed -i 's@linshare.documents.storage.filesystem.directory=.*@linshare.documents.storage.filesystem.directory=${STORAGE_FILESYSTEM_DIR}@' $target
+    sed -i 's@linshare.documents.storage.swift.identity=.*@linshare.documents.storage.swift.identity=${STORAGE_SWIFT_IDENTITY:-""}@' $target
+    sed -i 's@linshare.documents.storage.swift.credential=.*@linshare.documents.storage.swift.credential=${STORAGE_SWIFT_CREDENTIAL:-""}@' $target
+    sed -i 's@linshare.documents.storage.swift.endpoint=.*@linshare.documents.storage.swift.endpoint=${STORAGE_SWIFT_ENDPOINT:-""}@' $target
 
     echo -e "linshare.display.licenceTerm=false\n" >> $target
     echo -e 'linshare.mongo.replicatset=${REPLICA_SET:-""}\n' >> $target
