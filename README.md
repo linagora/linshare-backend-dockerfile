@@ -56,12 +56,13 @@ You can configure the above related settings through the following environment v
 |SPRING_PROFILES_ACTIVE (optional)  | default value is 'default,jcloud,mongo'. To enable sso, use 'sso,jcloud,mongo'
 |SSO_IP_LIST_ENABLE                 | enable trusted list of sso server ip. (default=false)
 |SSO_IP_LIST (optional)             | Trusted list of sso server ip.  (default="")
-|STORAGE_MODE                       | Available storage mode: <ul><li>filesystem : storing documents on file system<br/>**dependent variable:**<ul><li>`STORAGE_BUCKET`</li><li>`STORAGE_FILESYSTEM_DIR`</li></ul><li>swift-keystone : storing documents into swift<br/>**dependent variable:**<ul><li>`STORAGE_BUCKET`</li><li>`STORAGE_SWIFT_IDENTITY`</li><li>`STORAGE_SWIFT_CREDENTIAL`</li><li>`STORAGE_SWIFT_ENDPOINT`</li></ul></li></ul>
+|STORAGE_MODE                       | Available storage mode: <ul><li>filesystem : storing documents on file system<br/>**dependent variable:**<ul><li>`STORAGE_BUCKET`</li><li>`STORAGE_FILESYSTEM_DIR`</li></ul><li>swift-keystone or openstack-swift : storing documents into swift<br/>**dependent variable:**<ul><li>`STORAGE_BUCKET`</li><li>`STORAGE_SWIFT_IDENTITY`</li><li>`STORAGE_SWIFT_CREDENTIAL`</li><li>`STORAGE_SWIFT_ENDPOINT`</li></ul></li></ul>
 |STORAGE_BUCKET                     | storage bucket id; default: *e0531829-8a75-49f8-bb30-4539574d66c7*
 |STORAGE_FILESYSTEM_DIR             | storage filesystem directory; default: */var/lib/linshare/filesystemstorage*
 |STORAGE_SWIFT_ENDPOINT             | storage swift endpoint e.g.: *http://127.0.0.1:5000/v2.0*
 |STORAGE_SWIFT_IDENTITY             | storage swift identity e.g.: *tenant_name:user_name*
 |STORAGE_SWIFT_CREDENTIAL           | storage swift credential e.g.: *password*
+|STORAGE_SWIFT_REGION_ID            | Region ID is required with openstack-swift.
 <br/>
 
 We add three mongodb environment variables in orther to specify the mongodb replica-set for each database.
