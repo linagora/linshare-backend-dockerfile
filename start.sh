@@ -68,20 +68,21 @@ if [ -z "${STORAGE_FILESYSTEM_DIR}" ] ; then
   echo "Warning : No STORAGE_FILESYSTEM_DIR configured, default value will be \"${STORAGE_FILESYSTEM_DIR}\""
 fi
 
-if [ "${STORAGE_MODE}" == "swift-keystone" -a -z "${STORAGE_SWIFT_IDENTITY}" ] ; then
+if [ "${STORAGE_MODE}" != "filesystem" -a -z "${STORAGE_SWIFT_IDENTITY}" ] ; then
     echo "ERROR : No STORAGE_SWIFT_IDENTITY configured, interrupting startup"
     exit 1
 fi
 
-if [ ${STORAGE_MODE} == "swift-keystone" -a -z "${STORAGE_SWIFT_CREDENTIAL}" ] ; then
+if [ ${STORAGE_MODE} != "filesystem" -a -z "${STORAGE_SWIFT_CREDENTIAL}" ] ; then
     echo "ERROR : No STORAGE_SWIFT_CREDENTIAL configured, interrupting startup"
     exit 1
 fi
 
-if [ ${STORAGE_MODE} == "swift-keystone" -a -z "${STORAGE_SWIFT_ENDPOINT}" ] ; then
+if [ ${STORAGE_MODE} != "filesystem" -a -z "${STORAGE_SWIFT_ENDPOINT}" ] ; then
     echo "ERROR : No STORAGE_SWIFT_ENDPOINT configured, interrupting startup"
     exit 1
 fi
+
 
 # OPENSMTPD SETTINGS
 
@@ -106,6 +107,7 @@ echo "storage filesystem directory : ${STORAGE_FILESYSTEM_DIR}"
 echo "storage swift identity : ${STORAGE_SWIFT_IDENTITY}"
 echo "storage swift credential : ${STORAGE_SWIFT_CREDENTIAL}"
 echo "storage swift endpoint : ${STORAGE_SWIFT_ENDPOINT}"
+echo "storage swift region id (optional) : ${STORAGE_SWIFT_REGION_ID}"
 
  
 # LINSHARE OPTIONS (WARNING : modifying these settings is at your own risks)
@@ -178,6 +180,7 @@ else
     sed -i 's@linshare.documents.storage.swift.identity=.*@linshare.documents.storage.swift.identity=${STORAGE_SWIFT_IDENTITY:-""}@' $target
     sed -i 's@linshare.documents.storage.swift.credential=.*@linshare.documents.storage.swift.credential=${STORAGE_SWIFT_CREDENTIAL:-""}@' $target
     sed -i 's@linshare.documents.storage.swift.endpoint=.*@linshare.documents.storage.swift.endpoint=${STORAGE_SWIFT_ENDPOINT:-""}@' $target
+    sed -i 's@# linshare.documents.storage.swift.regionId=.*@linshare.documents.storage.swift.regionId=${STORAGE_SWIFT_REGION_ID:-""}@' $target
 
     echo -e "linshare.display.licenceTerm=false\n" >> $target
     echo -e 'linshare.mongo.replicatset=${REPLICA_SET:-""}\n' >> $target
