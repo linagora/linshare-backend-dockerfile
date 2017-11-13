@@ -200,9 +200,9 @@ else
 
     sed -i "s/log4j.category.org.linagora.linshare.*/log4j.category.org.linagora.linshare=info/" ${conf_dir}/log4j.properties
 
-    sed -i "s@#log4j.category.org.springframework.*@log4j.category.org.springframework=warn@" ${conf_dir}/log4j.properties
+    sed -i "s@#log4j.category.org.springframework.*@log4j.category.org.springframework=info@" ${conf_dir}/log4j.properties
     sed -i "s@log4j.category.org.linagora.linkit.*@log4j.category.org.linagora.linkit=warn@" ${conf_dir}/log4j.properties
-    sed -i "s@log4j.category.org.linagora.linshare.*@log4j.category.org.linagora.linshare=warn@" ${conf_dir}/log4j.properties
+    sed -i "s@log4j.category.org.linagora.linshare.*@log4j.category.org.linagora.linshare=info@" ${conf_dir}/log4j.properties
 fi
 
 
