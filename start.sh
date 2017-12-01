@@ -182,6 +182,7 @@ else
     sed -i 's@linshare.documents.storage.swift.endpoint=.*@linshare.documents.storage.swift.endpoint=${STORAGE_SWIFT_ENDPOINT:-""}@' $target
     sed -i 's@# linshare.documents.storage.swift.regionId=.*@linshare.documents.storage.swift.regionId=${STORAGE_SWIFT_REGION_ID:-""}@' $target
 
+    echo -e "\n" >> $target
     echo -e "linshare.display.licenceTerm=false\n" >> $target
     echo -e 'linshare.mongo.replicatset=${REPLICA_SET:-""}\n' >> $target
     echo -e 'linshare.mongo.gridfs.bigfiles.replicatset=${REPLICA_SET_BIGFILES:-""}\n' >> $target
