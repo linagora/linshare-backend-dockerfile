@@ -115,6 +115,7 @@ src_dir=webapps/linshare/WEB-INF/classes
 conf_dir=/etc/linshare
 data_dir=/var/lib/linshare
 
+
 # Allow to tweak JVM settings
 [ -z "$JAVA_OPTS" ] || java_opts="$JAVA_OPTS"
 export JAVA_OPTS="-Djava.awt.headless=true -Xms512m -Xmx1536m
@@ -125,6 +126,10 @@ export JAVA_OPTS="-Djava.awt.headless=true -Xms512m -Xmx1536m
 
 # Extracting .war's files
 unzip -o -qq webapps/linshare.war -d webapps/linshare
+
+echo ">-------- Content of version.properties -----------"
+cat ${src_dir}/version.properties
+echo "--------- Content of version.properties ----------<"
 
 # Making /etc/linshare if doesn't exists
 [ -d /etc/linshare ] || mkdir /etc/linshare
