@@ -11,6 +11,9 @@ ARG EXT="com"
 ENV REPLICA_SET=
 ENV REPLICA_SET_BIGFILES=
 ENV REPLICA_SET_SMALLFILES=
+ENV THUMBNAIL_ENABLE=false
+ENV THUMBNAIL_HOST=thumbnail-server
+ENV THUMBNAIL_PORT=8080
 
 RUN URL="https://nexus.linagora.${EXT}/service/local/artifact/maven/content?r=linshare-${CHANNEL}&g=org.linagora.linshare&a=linshare-core&v=${VERSION}"; \
  wget --no-check-certificate --progress=bar:force:noscroll \

@@ -63,6 +63,9 @@ You can configure the above related settings through the following environment v
 |STORAGE_SWIFT_IDENTITY             | storage swift identity e.g.: *tenant_name:user_name*
 |STORAGE_SWIFT_CREDENTIAL           | storage swift credential e.g.: *password*
 |STORAGE_SWIFT_REGION_ID            | Region ID is required with openstack-swift.
+|THUMBNAIL_ENABLE (optional)        | By default it is disabled : false|true
+|THUMBNAIL_HOST (optional)          | Thumbnail host : thumbnail-server
+|THUMBNAIL_PORT (optional)          | Thumbnail port : 8080
 <br/>
 
 We add three mongodb environment variables in orther to specify the mongodb replica-set for each database.

@@ -187,7 +187,10 @@ else
     sed -i 's@linshare.documents.storage.swift.endpoint=.*@linshare.documents.storage.swift.endpoint=${STORAGE_SWIFT_ENDPOINT:-""}@' $target
     sed -i 's@# linshare.documents.storage.swift.regionId=.*@linshare.documents.storage.swift.regionId=${STORAGE_SWIFT_REGION_ID:-""}@' $target
 
-    sed -i 's@linshare.documents.thumbnail.enable=.*@linshare.documents.thumbnail.enable=false@' $target
+    sed -i 's@linshare.documents.thumbnail.enable=.*@linshare.documents.thumbnail.enable=${THUMBNAIL_ENABLE}@' $target
+    sed -i 's@linshare.documents.thumbnail.pdf.enable=.*@linshare.documents.thumbnail.pdf.enable=true@' $target
+    sed -i 's@linshare.linthumbnail.remote.mode=.*@linshare.linthumbnail.remote.mode=true@' $target
+    sed -i 's@linshare.linthumbnail.dropwizard.server=.*@linshare.linthumbnail.dropwizard.server=http://${THUMBNAIL_HOST}:${THUMBNAIL_PORT}/linthumbnail?mimeType=%1$s@' $target
 
     echo -e "\n" >> $target
     echo -e "linshare.display.licenceTerm=false\n" >> $target
