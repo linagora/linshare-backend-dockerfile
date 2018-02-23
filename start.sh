@@ -108,6 +108,9 @@ echo "storage swift identity : ${STORAGE_SWIFT_IDENTITY}"
 echo "storage swift credential : ${STORAGE_SWIFT_CREDENTIAL}"
 echo "storage swift endpoint : ${STORAGE_SWIFT_ENDPOINT}"
 echo "storage swift region id (optional) : ${STORAGE_SWIFT_REGION_ID}"
+echo "jwt secret (optional) : ${JWT_SECRET}"
+echo "jwt expiration (optional) : ${JWT_EXPIRATION}"
+echo "jwt token max lifetime (optional) : ${JWT_TOKEN_MAX_LIFETIME}"
 
  
 # LINSHARE OPTIONS (WARNING : modifying these settings is at your own risks)
@@ -191,6 +194,10 @@ else
     sed -i 's@linshare.documents.thumbnail.pdf.enable=.*@linshare.documents.thumbnail.pdf.enable=true@' $target
     sed -i 's@linshare.linthumbnail.remote.mode=.*@linshare.linthumbnail.remote.mode=true@' $target
     sed -i 's@linshare.linthumbnail.dropwizard.server=.*@linshare.linthumbnail.dropwizard.server=http://${THUMBNAIL_HOST}:${THUMBNAIL_PORT}/linthumbnail?mimeType=%1$s@' $target
+
+    sed -i 's@# jwt.secret=.*@jwt.secret=${JWT_SECRET:-"mySecret"}@' $target
+    sed -i 's@# jwt.expiration=.*@jwt.expiration=${JWT_EXPIRATION:-"300"}@' $target
+    sed -i 's@# jwt.token.max.lifetime=.*@jwt.expiration=${JWT_TOKEN_MAX_LIFETIME:-"300"}@' $target
 
     echo -e "\n" >> $target
     echo -e "linshare.display.licenceTerm=false\n" >> $target
