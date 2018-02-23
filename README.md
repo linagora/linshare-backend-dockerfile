@@ -66,6 +66,9 @@ You can configure the above related settings through the following environment v
 |THUMBNAIL_ENABLE (optional)        | By default it is disabled : false|true
 |THUMBNAIL_HOST (optional)          | Thumbnail host : thumbnail-server
 |THUMBNAIL_PORT (optional)          | Thumbnail port : 8080
+|JWT_SECRET (optional)              | Jwt secret : mySecret
+|JWT_EXPIRATION (optional)          | Jwt expiration : 300
+|JWT_TOKEN_MAX_LIFETIME (optional)  | Jwt token max lifetim : 300
 <br/>
 
 We add three mongodb environment variables in orther to specify the mongodb replica-set for each database.
