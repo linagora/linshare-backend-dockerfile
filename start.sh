@@ -104,8 +104,16 @@ echo "clamav port : $CLAMAV_PORT"
 echo "storage mode : ${STORAGE_MODE}"
 echo "storage bucket : ${STORAGE_BUCKET}"
 echo "storage filesystem directory : ${STORAGE_FILESYSTEM_DIR}"
-echo "storage swift identity : ${STORAGE_SWIFT_IDENTITY}"
-echo "storage swift credential : ${STORAGE_SWIFT_CREDENTIAL}"
+if [ -z ${STORAGE_SWIFT_IDENTITY} ] ; then
+    echo "storage swift identity : ${STORAGE_SWIFT_IDENTITY}"
+else
+    echo "storage swift identity : xxxxxxxxx"
+fi
+if [ -z ${STORAGE_SWIFT_CREDENTIAL} ] ; then
+    echo "storage swift credential : ${STORAGE_SWIFT_CREDENTIAL}"
+else
+    echo "storage swift credential : xxxxxxxxx"
+fi
 echo "storage swift endpoint : ${STORAGE_SWIFT_ENDPOINT}"
 echo "storage swift region id (optional) : ${STORAGE_SWIFT_REGION_ID}"
 echo "jwt secret (optional) : ${JWT_SECRET}"
