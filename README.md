@@ -59,16 +59,20 @@ You can configure the above related settings through the following environment v
 |STORAGE_MODE                       | Available storage mode: <ul><li>filesystem : storing documents on file system<br/>**dependent variable:**<ul><li>`STORAGE_BUCKET`</li><li>`STORAGE_FILESYSTEM_DIR`</li></ul><li>swift-keystone or openstack-swift : storing documents into swift<br/>**dependent variable:**<ul><li>`STORAGE_BUCKET`</li><li>`STORAGE_SWIFT_IDENTITY`</li><li>`STORAGE_SWIFT_CREDENTIAL`</li><li>`STORAGE_SWIFT_ENDPOINT`</li></ul></li></ul>
 |STORAGE_BUCKET                     | storage bucket id; default: *e0531829-8a75-49f8-bb30-4539574d66c7*
 |STORAGE_FILESYSTEM_DIR             | storage filesystem directory; default: */var/lib/linshare/filesystemstorage*
-|STORAGE_SWIFT_ENDPOINT             | storage swift endpoint e.g.: *http://127.0.0.1:5000/v2.0*
-|STORAGE_SWIFT_IDENTITY             | storage swift identity e.g.: *tenant_name:user_name*
-|STORAGE_SWIFT_CREDENTIAL           | storage swift credential e.g.: *password*
-|STORAGE_SWIFT_REGION_ID            | Region ID is required with openstack-swift.
+|OS_AUTH_URL                        | storage swift endpoint e.g.: *http://127.0.0.1:5000/v2.0*
+|OS_TENANT_ID                       | storage swift tenant id
+|OS_TENANT_NAME                     | storage swift tenant name
+|OS_USERNAME                        | storage swift username
+|OS_PASSWORD                        | storage swift password
+|OS_REGION_ID (optional)            | Region ID is required only with openstack-swift.
 |THUMBNAIL_ENABLE (optional)        | By default it is disabled : false|true
 |THUMBNAIL_HOST (optional)          | Thumbnail host : thumbnail-server
 |THUMBNAIL_PORT (optional)          | Thumbnail port : 8080
 |JWT_SECRET (optional)              | Jwt secret : mySecret
 |JWT_EXPIRATION (optional)          | Jwt expiration : 300
 |JWT_TOKEN_MAX_LIFETIME (optional)  | Jwt token max lifetim : 300
+|START_DEBUG                        | if equal to 1, additionnal debug traces will be displayed.
+|LS_DEBUG                           | if equal to 1, it enables debug traces for LinShare (log4j configuration)
 <br/>
 
 We add three mongodb environment variables in orther to specify the mongodb replica-set for each database.
