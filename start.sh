@@ -1,5 +1,15 @@
 #! /bin/bash -e
 
+# if START_DEBUG=1, debug traces will be displayed.
+export DEBUG=${DEBUG:-0}
+if [ ${DEBUG} -eq 1 ] ; then
+    set -x
+fi
+export START_DEBUG=${START_DEBUG:-0}
+
+# if LS_DEBUG=1, log4 debug traces will be displayed.
+export LS_DEBUG=${LS_DEBUG:-0}
+
 # Check for deprecated parameters
 [ ! -z "$POSTGRES_URL" ] && {
     echo "POSTGRES_URL parameter is deprecated. Please use POSTGRES_HOST instead."
@@ -68,21 +78,43 @@ if [ -z "${STORAGE_FILESYSTEM_DIR}" ] ; then
   echo "Warning : No STORAGE_FILESYSTEM_DIR configured, default value will be \"${STORAGE_FILESYSTEM_DIR}\""
 fi
 
-if [ "${STORAGE_MODE}" != "filesystem" -a -z "${STORAGE_SWIFT_IDENTITY}" ] ; then
-    echo "ERROR : No STORAGE_SWIFT_IDENTITY configured, interrupting startup"
-    exit 1
-fi
+if [ "${STORAGE_MODE}" != "filesystem" ] ; then
+    echo "INFO: STORAGE_MODE is different than filesystem"
+    echo "INFO: checking object storage configuration ..."
+    if [ -z "${OS_AUTH_URL}" ] ; then
+        echo "ERROR : No OS_AUTH_URL configured, interrupting startup"
+        exit 1
+    fi
 
-if [ ${STORAGE_MODE} != "filesystem" -a -z "${STORAGE_SWIFT_CREDENTIAL}" ] ; then
-    echo "ERROR : No STORAGE_SWIFT_CREDENTIAL configured, interrupting startup"
-    exit 1
-fi
+    if [ -z "${OS_TENANT_ID}" ] ; then
+        echo "ERROR : No OS_TENANT_ID configured, interrupting startup"
+        exit 1
+    fi
 
-if [ ${STORAGE_MODE} != "filesystem" -a -z "${STORAGE_SWIFT_ENDPOINT}" ] ; then
-    echo "ERROR : No STORAGE_SWIFT_ENDPOINT configured, interrupting startup"
-    exit 1
-fi
+    if [ -z "${OS_TENANT_NAME}" ] ; then
+        echo "ERROR : No OS_TENANT_NAME configured, interrupting startup"
+        exit 1
+    fi
+    if [ -z "${OS_USERNAME}" ] ; then
+        echo "ERROR : No OS_USERNAME configured, interrupting startup"
+        exit 1
+    fi
 
+    export STORAGE_SWIFT_IDENTITY="${OS_TENANT_NAME}:${OS_USERNAME}"
+    if [ ${START_DEBUG} -eq 1 ] ; then
+        echo "storage swift identity : ${STORAGE_SWIFT_IDENTITY:0:4}..."
+    fi
+
+    if [ -z "${OS_PASSWORD}" ] ; then
+        echo "ERROR : No OS_PASSWORD configured, interrupting startup"
+        exit 1
+    fi
+
+    if [ -z "${OS_REGION_NAME}" ] ; then
+        echo "WARN : No OS_REGION_NAME configured"
+    fi
+    echo "INFO: object storage configuration checked"
+fi
 
 # OPENSMTPD SETTINGS
 
@@ -104,23 +136,23 @@ echo "clamav port : $CLAMAV_PORT"
 echo "storage mode : ${STORAGE_MODE}"
 echo "storage bucket : ${STORAGE_BUCKET}"
 echo "storage filesystem directory : ${STORAGE_FILESYSTEM_DIR}"
-if [ -z ${STORAGE_SWIFT_IDENTITY} ] ; then
-    echo "storage swift identity : ${STORAGE_SWIFT_IDENTITY}"
+echo "storage endpoint : ${OS_AUTH_URL}"
+if [ ${START_DEBUG} -eq 1 ] ; then
+    echo "storage tenant id : ${OS_TENANT_ID:0:4}..."
+    echo "storage tenant name : ${OS_TENANT_NAME:0:4}..."
+    echo "storage username : ${OS_USERNAME:0:4}..."
+    echo "storage password : ${OS_PASSWORD:0:4}..."
 else
-    echo "storage swift identity : xxxxxxxxx"
+    echo "storage tenant id : xxx"
+    echo "storage tenant name : xxx"
+    echo "storage username : xxx"
+    echo "storage password : xxx"
 fi
-if [ -z ${STORAGE_SWIFT_CREDENTIAL} ] ; then
-    echo "storage swift credential : ${STORAGE_SWIFT_CREDENTIAL}"
-else
-    echo "storage swift credential : xxxxxxxxx"
-fi
-echo "storage swift endpoint : ${STORAGE_SWIFT_ENDPOINT}"
-echo "storage swift region id (optional) : ${STORAGE_SWIFT_REGION_ID}"
+echo "storage region id (optional) : ${OS_REGION_NAME}"
 echo "jwt secret (optional) : ${JWT_SECRET}"
 echo "jwt expiration (optional) : ${JWT_EXPIRATION}"
 echo "jwt token max lifetime (optional) : ${JWT_TOKEN_MAX_LIFETIME}"
 
- 
 # LINSHARE OPTIONS (WARNING : modifying these settings is at your own risks)
 src_dir=webapps/linshare/WEB-INF/classes
 conf_dir=/etc/linshare
@@ -194,9 +226,9 @@ else
     sed -i 's@linshare.documents.storage.bucket=.*@linshare.documents.storage.bucket=${STORAGE_BUCKET}@' $target
     sed -i 's@linshare.documents.storage.filesystem.directory=.*@linshare.documents.storage.filesystem.directory=${STORAGE_FILESYSTEM_DIR}@' $target
     sed -i 's@linshare.documents.storage.swift.identity=.*@linshare.documents.storage.swift.identity=${STORAGE_SWIFT_IDENTITY:-""}@' $target
-    sed -i 's@linshare.documents.storage.swift.credential=.*@linshare.documents.storage.swift.credential=${STORAGE_SWIFT_CREDENTIAL:-""}@' $target
-    sed -i 's@linshare.documents.storage.swift.endpoint=.*@linshare.documents.storage.swift.endpoint=${STORAGE_SWIFT_ENDPOINT:-""}@' $target
-    sed -i 's@# linshare.documents.storage.swift.regionId=.*@linshare.documents.storage.swift.regionId=${STORAGE_SWIFT_REGION_ID:-""}@' $target
+    sed -i 's@linshare.documents.storage.swift.credential=.*@linshare.documents.storage.swift.credential=${OS_PASSWORD:-""}@' $target
+    sed -i 's@linshare.documents.storage.swift.endpoint=.*@linshare.documents.storage.swift.endpoint=${OS_AUTH_URL:-""}@' $target
+    sed -i 's@# linshare.documents.storage.swift.regionId=.*@linshare.documents.storage.swift.regionId=${OS_REGION_NAME:-""}@' $target
 
     sed -i 's@linshare.documents.thumbnail.enable=.*@linshare.documents.thumbnail.enable=${THUMBNAIL_ENABLE}@' $target
     sed -i 's@linshare.documents.thumbnail.pdf.enable=.*@linshare.documents.thumbnail.pdf.enable=true@' $target
@@ -224,11 +256,9 @@ else
 
     cp ${src_dir}/log4j.properties ${conf_dir}/log4j.properties
 
-    sed -i "s/log4j.category.org.linagora.linshare.*/log4j.category.org.linagora.linshare=info/" ${conf_dir}/log4j.properties
-
-    sed -i "s@#log4j.category.org.springframework.*@log4j.category.org.springframework=warn@" ${conf_dir}/log4j.properties
-    sed -i "s@log4j.category.org.linagora.linkit.*@log4j.category.org.linagora.linkit=warn@" ${conf_dir}/log4j.properties
-    sed -i "s@log4j.category.org.linagora.linshare.*@log4j.category.org.linagora.linshare=warn@" ${conf_dir}/log4j.properties
+    if [ ${LS_DEBUG} -eq 1 ] ; then
+        sed -i "s@log4j.category.org.linagora.linshare=.*@log4j.category.org.linagora.linshare=debug@" ${conf_dir}/log4j.properties
+    fi
 fi
 
 
@@ -245,5 +275,5 @@ else
 fi
 
 
-/bin/bash /usr/local/tomcat/bin/catalina.sh run
 
+/bin/bash /usr/local/tomcat/bin/catalina.sh run
