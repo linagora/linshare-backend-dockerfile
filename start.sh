@@ -276,4 +276,4 @@ fi
 
 
 
-/bin/bash /usr/local/tomcat/bin/catalina.sh run
+exec /usr/local/tomcat/bin/catalina.sh run
