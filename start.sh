@@ -81,39 +81,73 @@ fi
 if [ "${STORAGE_MODE}" != "filesystem" ] ; then
     echo "INFO: STORAGE_MODE is different than filesystem"
     echo "INFO: checking object storage configuration ..."
-    if [ -z "${OS_AUTH_URL}" ] ; then
-        echo "ERROR : No OS_AUTH_URL configured, interrupting startup"
-        exit 1
-    fi
 
-    if [ -z "${OS_TENANT_ID}" ] ; then
-        echo "ERROR : No OS_TENANT_ID configured, interrupting startup"
-        exit 1
-    fi
+    if [ "${STORAGE_MODE}" == "s3" ] ; then
+        # a whole refactoring is needed. #ugly
+        export OS_AUTH_URL=${AWS_AUTH_URL}
+        export OS_USERNAME=${AWS_ACCESS_KEY_ID}
+        export STORAGE_SWIFT_IDENTITY=${AWS_ACCESS_KEY_ID}
+        export OS_PASSWORD=${AWS_SECRET_ACCESS_KEY}
+        export OS_REGION_NAME=${AWS_REGION}
 
-    if [ -z "${OS_TENANT_NAME}" ] ; then
-        echo "ERROR : No OS_TENANT_NAME configured, interrupting startup"
-        exit 1
-    fi
-    if [ -z "${OS_USERNAME}" ] ; then
-        echo "ERROR : No OS_USERNAME configured, interrupting startup"
-        exit 1
-    fi
+        echo "INFO: checking AWS S3 configuration ..."
+        if [ -z "${AWS_AUTH_URL}" ] ; then
+            echo "ERROR : No AWS_AUTH_URL configured, interrupting startup"
+            exit 1
+        fi
+        if [ -z "${AWS_ACCESS_KEY_ID}" ] ; then
+            echo "ERROR : No AWS_ACCESS_KEY_ID configured, interrupting startup"
+            exit 1
+        fi
+        if [ ${START_DEBUG} -eq 1 ] ; then
+            echo "storage s3 access key : ${STORAGE_SWIFT_IDENTITY:0:4}..."
+        fi
 
-    export STORAGE_SWIFT_IDENTITY="${OS_TENANT_NAME}:${OS_USERNAME}"
-    if [ ${START_DEBUG} -eq 1 ] ; then
-        echo "storage swift identity : ${STORAGE_SWIFT_IDENTITY:0:4}..."
-    fi
+        if [ -z "${AWS_SECRET_ACCESS_KEY}" ] ; then
+            echo "ERROR : No AWS_SECRET_ACCESS_KEY configured, interrupting startup"
+            exit 1
+        fi
 
-    if [ -z "${OS_PASSWORD}" ] ; then
-        echo "ERROR : No OS_PASSWORD configured, interrupting startup"
-        exit 1
-    fi
+        if [ -z "${AWS_REGION}" ] ; then
+            echo "WARN : No AWS_REGION configured"
+        fi
+        echo "INFO: OpenStack configuration checked"
+    else
+        echo "INFO: checking OpenStack configuration ..."
+        if [ -z "${OS_AUTH_URL}" ] ; then
+            echo "ERROR : No OS_AUTH_URL configured, interrupting startup"
+            exit 1
+        fi
 
-    if [ -z "${OS_REGION_NAME}" ] ; then
-        echo "WARN : No OS_REGION_NAME configured"
+        if [ -z "${OS_TENANT_ID}" ] ; then
+            echo "ERROR : No OS_TENANT_ID configured, interrupting startup"
+            exit 1
+        fi
+
+        if [ -z "${OS_TENANT_NAME}" ] ; then
+            echo "ERROR : No OS_TENANT_NAME configured, interrupting startup"
+            exit 1
+        fi
+        if [ -z "${OS_USERNAME}" ] ; then
+            echo "ERROR : No OS_USERNAME configured, interrupting startup"
+            exit 1
+        fi
+
+        export STORAGE_SWIFT_IDENTITY="${OS_TENANT_NAME}:${OS_USERNAME}"
+        if [ ${START_DEBUG} -eq 1 ] ; then
+            echo "storage swift identity : ${STORAGE_SWIFT_IDENTITY:0:4}..."
+        fi
+
+        if [ -z "${OS_PASSWORD}" ] ; then
+            echo "ERROR : No OS_PASSWORD configured, interrupting startup"
+            exit 1
+        fi
+
+        if [ -z "${OS_REGION_NAME}" ] ; then
+            echo "WARN : No OS_REGION_NAME configured"
+        fi
+        echo "INFO: OpenStack configuration checked"
     fi
-    echo "INFO: object storage configuration checked"
 fi
 
 # OPENSMTPD SETTINGS
