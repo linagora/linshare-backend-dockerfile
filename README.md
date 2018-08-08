@@ -132,7 +132,7 @@ Stable `releases` channel is selected by default.
 Version is for Linshare-core version. It's set to latest version by default.
 
 ```console
-$ docker build --build-arg VERSION=1.11.5 CHANNEL=snapshots -t linshare-backend .
+$ docker build --build-arg CHANNEL=snapshots -t linshare-backend --build-arg VERSION=2.2.0-SNAPSHOT .
 ```
 
 License
