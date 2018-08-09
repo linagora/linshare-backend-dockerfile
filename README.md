@@ -56,8 +56,8 @@ You can configure the above related settings through the following environment v
 |SPRING_PROFILES_ACTIVE (optional)  | default value is 'default,jcloud,mongo'. To enable sso, use 'sso,jcloud,mongo'
 |SSO_IP_LIST_ENABLE                 | enable trusted list of sso server ip. (default=false)
 |SSO_IP_LIST (optional)             | Trusted list of sso server ip.  (default="")
-|STORAGE_MODE                       | Available storage mode: <ul><li>filesystem : storing documents on file system<br/>**dependent variable:**<ul><li>`STORAGE_BUCKET`</li><li>`STORAGE_FILESYSTEM_DIR`</li></ul><li>swift-keystone or openstack-swift : storing documents into swift<br/>**dependent variable:**<ul><li>`STORAGE_BUCKET`</li><li>`STORAGE_SWIFT_IDENTITY`</li><li>`STORAGE_SWIFT_CREDENTIAL`</li><li>`STORAGE_SWIFT_ENDPOINT`</li></ul></li></ul>
-|STORAGE_BUCKET                     | storage bucket id; default: *e0531829-8a75-49f8-bb30-4539574d66c7*
+|STORAGE_MODE                       | Available storage mode: <ul><li>filesystem : storing documents on file system<br/>**dependent variables:**<ul><li>`STORAGE_BUCKET`</li><li>`STORAGE_FILESYSTEM_DIR`</li> </ul> <li>swift-keystone: storing documents into swift<br/>**dependent variables:** <ul> <li>`STORAGE_BUCKET`</li> <li>`OS_AUTH_URL`</li> <li>`OS_TENANT_ID`</li> <li>`OS_TENANT_NAME`</li> <li>`OS_USERNAME`</li> <li>`OS_PASSWORD`</li> </ul> </li> <li>openstack-swift: storing documents into swift with region support<br/>**dependent variables:** <ul> <li>`STORAGE_BUCKET`</li> <li>`OS_AUTH_URL`</li> <li>`OS_TENANT_ID`</li> <li>`OS_TENANT_NAME`</li> <li>`OS_USERNAME`</li> <li>`OS_PASSWORD`</li> <li>`OS_REGION_ID`</li> </ul> </li> <li>s3: storing documents into swift<br/>**dependent variables:** <ul> <li>`STORAGE_BUCKET`</li> <li>`AWS_AUTH_URL`</li> <li>`AWS_ACCESS_KEY_ID`</li> <li>`AWS_SECRET_ACCESS_KEY`</li> </ul> </li> </ul>
+|STORAGE_BUCKET                     | storage bucket id; default: *linshare-data* (old value was *e0531829-8a75-49f8-bb30-4539574d66c7*)
 |STORAGE_FILESYSTEM_DIR             | storage filesystem directory; default: */var/lib/linshare/filesystemstorage*
 |OS_AUTH_URL                        | storage swift endpoint e.g.: *http://127.0.0.1:5000/v2.0*
 |OS_TENANT_ID                       | storage swift tenant id
@@ -65,12 +65,14 @@ You can configure the above related settings through the following environment v
 |OS_USERNAME                        | storage swift username
 |OS_PASSWORD                        | storage swift password
 |OS_REGION_ID (optional)            | Region ID is required only with openstack-swift.
+|AWS_AUTH_URL                       | Endpoint of S3 server : ex: https://s3.amazonaws.com
+|AWS_ACCESS_KEY_ID                  | S3 access key
+|AWS_SECRET_ACCESS_KEY              | S3 secret access key
 |THUMBNAIL_ENABLE (optional)        | By default it is disabled : false|true
 |THUMBNAIL_HOST (optional)          | Thumbnail host : thumbnail-server
 |THUMBNAIL_PORT (optional)          | Thumbnail port : 8080
-|JWT_SECRET (optional)              | Jwt secret : mySecret
 |JWT_EXPIRATION (optional)          | Jwt expiration : 300
-|JWT_TOKEN_MAX_LIFETIME (optional)  | Jwt token max lifetim : 300
+|JWT_TOKEN_MAX_LIFETIME (optional)  | Jwt token max lifetime : 300
 |START_DEBUG                        | if equal to 1, additionnal debug traces will be displayed.
 |LS_DEBUG                           | if equal to 1, it enables debug traces for LinShare (log4j configuration)
 <br/>
