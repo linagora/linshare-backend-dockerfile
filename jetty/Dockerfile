@@ -28,7 +28,7 @@ ENV STORAGE_MODE=filesystem STORAGE_BUCKET=linshare-data STORAGE_FILESYSTEM_DIR=
 ENV JWT_EXPIRATION=300 JWT_TOKEN_MAX_LIFETIME=300 SSO_IP_LIST="" SSO_IP_LIST_ENABLE=false
 
 COPY --from=builder /tmp/linshare.war webapps/linshare.war
-COPY start.jetty.sh /usr/local/bin/start.sh
+COPY start.sh /usr/local/bin/start.sh
 
 CMD ["/usr/local/bin/start.sh"]
 
