@@ -17,6 +17,8 @@ ENV THUMBNAIL_ENABLE=false
 ENV THUMBNAIL_HOST=thumbnail-server
 ENV THUMBNAIL_PORT=8080
 
+COPY GandiStandardSSLCA2.pem /usr/share/ca-certificates/linagora/GandiStandardSSLCA2.pem
+
 RUN URL="https://nexus.linagora.${EXT}/service/local/artifact/maven/content?r=linshare-${CHANNEL}&g=org.linagora.linshare&a=linshare-core&v=${VERSION}"; \
  wget --no-check-certificate --progress=bar:force:noscroll \
  -O webapps/linshare.war "${URL}&p=war" \
@@ -28,4 +30,3 @@ RUN URL="https://nexus.linagora.${EXT}/service/local/artifact/maven/content?r=li
 COPY start.sh /usr/local/bin/start.sh
 
 CMD ["/usr/local/bin/start.sh"]
-

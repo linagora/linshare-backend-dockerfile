@@ -308,6 +308,20 @@ else
     echo "There is no extra properties to set. Skipping."
 fi
 
-
+l_input_dir=/new-ca
+if [ -d ${l_input_dir} ] ; then
+    echo "INFO: Folder ${l_input_dir} exists, adding all files as new CA ..."
+    l_output_dir=/usr/share/ca-certificates/linshare/
+    mkdir -p ${l_output_dir}
+    for l_file in $(ls ${l_input_dir}/)
+    do
+        cp -v ${l_input_dir}/${l_file} ${l_output_dir}
+        echo "linshare/${l_file}" >> /etc/ca-certificates.conf
+    done
+else
+    echo "INFO: no extra ca found in folder ${l_input_dir}."
+fi
+echo "linagora/GandiStandardSSLCA2.pem" >> /etc/ca-certificates.conf
+update-ca-certificates
 
 exec /usr/local/tomcat/bin/catalina.sh run
