@@ -83,6 +83,13 @@ For exemple if we had a replica-set of three mongodb replication for the "linsha
 
 `REPLICA_SET=10.129.0.3:27017,10.129.0.4:27017,10.129.0.5:27017`
 
+New CA
+------
+
+If you want to add a new CA to this image at runtime, please add your file using a volume in
+/new-ca folder. All file in this folder will be added to Tomcat keystore.
+
+
 Run
 ---
 
