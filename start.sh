@@ -13,6 +13,17 @@ export START_DEBUG=${START_DEBUG:-0}
 export LS_DEBUG=${LS_DEBUG:-0}
 
 
+# Description: This method will check and displayed a list of env variables.
+#              The value of every env variables with names containg SECRET or
+#              PASSWORD will be troncated (only the first 4 characters).
+# First parameter is `mode`:
+# * mode=0 : just display env vars
+# * mode=1 : the script will abort if some env var is missing.
+# Second parameter is `legend`:
+# * legend=0 : do not display the legend
+# * legend=1 : display the legend
+# Next parameters : ENV variables to test
+# ex: check_env_variables 1 1 VAR1 VAR2 VAR4
 function check_env_variables ()
 {
     local l_mode=${1}
