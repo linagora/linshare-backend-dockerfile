@@ -11,6 +11,8 @@ ARG EXT="com"
 ENV LINSHARE_VERSION=$VERSION
 ENV START_DEBUG=0
 
+COPY GandiStandardSSLCA2.pem /usr/share/ca-certificates/linagora/GandiStandardSSLCA2.pem
+
 ENV POSTGRES_HOST="" POSTGRES_PORT=5432 POSTGRES_DATABASE=linshare POSTGRES_USER=linshare POSTGRES_PASSWORD=linshare
 ENV MONGODB_HOST="" MONGODB_PORT=27017 MONGODB_USER=mongo MONGODB_PASSWORD=mongo
 ENV REPLICA_SET="" REPLICA_SET_BIGFILES="" REPLICA_SET_SMALLFILES=""
@@ -34,4 +36,3 @@ RUN URL="https://nexus.linagora.${EXT}/service/local/artifact/maven/content?r=li
 COPY start.sh /usr/local/bin/start.sh
 
 CMD ["/usr/local/bin/start.sh"]
-
