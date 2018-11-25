@@ -21,17 +21,14 @@ ENV SMTP_HOST="" SMTP_PORT=25 SMTP_USER="" SMTP_PASSWORD="" SMTP_AUTH_ENABLE=fal
 ENV STORAGE_MODE=filesystem STORAGE_BUCKET=linshare-data STORAGE_FILESYSTEM_DIR=/var/lib/linshare/filesystemstorage
 ENV JWT_EXPIRATION=300 JWT_TOKEN_MAX_LIFETIME=300 SSO_IP_LIST="" SSO_IP_LIST_ENABLE=false
 
-RUN apt-get update && apt-get install -y --no-install-recommends wget unzip && apt-get clean && \
+RUN apt-get update && apt-get install -y --no-install-recommends unzip curl && apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN URL="https://nexus.linagora.${EXT}/service/local/artifact/maven/content?r=linshare-${CHANNEL}&g=org.linagora.linshare&a=linshare-core&v=${VERSION}"; \
- wget --no-check-certificate --progress=bar:force:noscroll \
- -O webapps/linshare.war "${URL}&p=war" \
- && wget --no-check-certificate --progress=bar:force:noscroll \
- -O linshare.war.sha1 "${URL}&p=war.sha1" \
- && sed -i 's#^\(.*\)#\1\twebapps/linshare.war#' linshare.war.sha1 \
- && sha1sum -c linshare.war.sha1 && rm -f linshare.war.sha1 \
- && sed -i "/xom/i\jclouds-bouncycastle-1.9.2.jar,bcprov-*.jar,\\\ " /usr/local/tomcat/conf/catalina.properties
+ENV URL="https://nexus.linagora.${EXT}/service/local/artifact/maven/content?r=linshare-${CHANNEL}&g=org.linagora.linshare&a=linshare-core&v=${VERSION}"
+RUN curl -k -s "${URL}&p=war" -o webapps/linshare.war && curl -k -s "${URL}&p=war.sha1" -o linshare.war.sha1 \
+  && sed -i 's#^\(.*\)#\1\twebapps/linshare.war#' linshare.war.sha1 \
+  && sha1sum -c linshare.war.sha1 && rm -f linshare.war.sha1 \
+  && sed -i "/xom/i\jclouds-bouncycastle-1.9.2.jar,bcprov-*.jar,\\\ " /usr/local/tomcat/conf/catalina.properties
 
 COPY start.sh /usr/local/bin/start.sh
 
