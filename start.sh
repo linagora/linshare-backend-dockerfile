@@ -13,8 +13,8 @@ export START_DEBUG=${START_DEBUG:-0}
 export LS_DEBUG=${LS_DEBUG:-0}
 
 
-# Description: This method will check and displayed a list of env variables.
-#              The value of every env variables with names containg SECRET or
+# Description: This method will check and display a list of env variables.
+#              The value of every env variables with names containing SECRET or
 #              PASSWORD will be troncated (only the first 4 characters).
 # First parameter is `mode`:
 # * mode=0 : just display env vars
