@@ -41,6 +41,8 @@ You can configure the above related settings through the following environment v
 |SMTP_PORT                          | smtp port
 |SMTP_USER                          | smtp user
 |SMTP_PASS                          | smtp password
+|SMTP_START_TLS_ENABLE              | enable start tls
+|SMTP_SSL_ENABLE                    | enable ssl (force ssl only)
 |POSTGRES_HOST                      | postgres host
 |POSTGRES_PORT                      | postgres port
 |POSTGRES_USER                      | postgres user

@@ -152,6 +152,8 @@ else
     sed -i 's@mail.smtp.auth.needed.*@mail.smtp.auth.needed=${SMTP_AUTH_ENABLE}@' $target
     sed -i 's@mail.smtp.user.*@mail.smtp.user=${SMTP_USER}@' $target
     sed -i 's@mail.smtp.password.*@mail.smtp.password=${SMTP_PASSWORD}@' $target
+    sed -i 's@mail.smtp.starttls.enable.*@mail.smtp.starttls.enable=${SMTP_START_TLS_ENABLE}@' $target
+    sed -i 's@mail.smtp.ssl.enable.*@mail.smtp.ssl.enable=${SMTP_SSL_ENABLE}@' $target
 
     sed -i 's@linshare.db.url=jdbc:postgresql.*@linshare.db.url=jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}@' $target
     sed -i 's@linshare.db.username.*@linshare.db.username=${POSTGRES_USER}@' $target
