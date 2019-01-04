@@ -39,19 +39,19 @@ You can configure the above related settings through the following environment v
 |JAVA_OPTS                          | java env variables
 |SMTP_HOST                          | smtp host
 |SMTP_PORT                          | smtp port
-|SMTP_USER                          | smtp user
-|SMTP_PASS                          | smtp password
+|SMTP_USER (optional)               | smtp user
+|SMTP_PASSWORD (optional)           | smtp password
 |SMTP_START_TLS_ENABLE              | enable start tls
 |SMTP_SSL_ENABLE                    | enable ssl (force ssl only)
 |POSTGRES_HOST                      | postgres host
 |POSTGRES_PORT                      | postgres port
 |POSTGRES_USER                      | postgres user
-|POSTGRES_PASS                      | postgres password
+|POSTGRES_PASSWORD                  | postgres password
 |POSTGRES_DATABASE                  | postgres database with default value "linshare"
 |MONGODB_HOST                       | mongodb host
 |MONGODB_PORT                       | mongodb port
 |MONGODB_USER                       | mongodb user
-|MONGODB_PASS                       | mongodb password
+|MONGODB_PASSWORD                   | mongodb password
 |REPLICA_SET (optional)             | replica-set for "linshare" database (if not set MONGODB_HOST and MONGODB_PORT will be used)
 |REPLICA_SET_BIGFILES (optional)    | replica-set for "linshare-files" database (if not set MONGODB_HOST and MONGODB_PORT will be used)
 |REPLICA_SET_SMALLFILES (optional)  | replica-set for "linshare-bigfiles" database (if not set MONGODB_HOST and MONGODB_PORT will be used)
@@ -109,11 +109,9 @@ And if any changes are necessary you can set the new values by passing them as f
 $ docker run -it --rm -p 8080:8080 \
 -e SMTP_HOST=smtp.linshare.com \
 -e SMTP_PORT=25 \
--e SMTP_USER=linshare \
--e SMTP_PASS=linshare \
 -e POSTGRES_HOST=postgres.linshare.com \
 -e POSTGRES_USER=linshare \
--e POSTGRES_PASS=linshare \
+-e POSTGRES_PASSWORD=linshare \
 -e CLAMAV_HOST=clamav.linshare.com \
 -e CLAMAV_PORT=4410 \
 -e JAVA_OPTS="-Xms1024m" \
