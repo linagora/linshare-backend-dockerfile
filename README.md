@@ -52,6 +52,10 @@ You can configure the above related settings through the following environment v
 |MONGODB_PORT                       | mongodb port
 |MONGODB_USER                       | mongodb user
 |MONGODB_PASSWORD                   | mongodb password
+|MONGODB_URI                        | mongodb uri
+|MONGODB_URI_SMALLFILES             | mongodb uri for smallfiles
+|MONGODB_URI_BIGFILES               | mongodb uri for bigfiles
+|MONGODB_WRITE_CONCERN              | Available Write concern value: <ul><li>MAJORITY: waits on a majority of servers for the write operation</li> <li>JOURNALED: Write operations wait for the server to group commit to the journal file on disk</li> <li>ACKNOWLEDGED: Write operations that use this write concern will wait for acknowledgement,using the default write concern configured on the server</li> </ul>
 |REPLICA_SET (optional)             | replica-set for "linshare" database (if not set MONGODB_HOST and MONGODB_PORT will be used)
 |REPLICA_SET_BIGFILES (optional)    | replica-set for "linshare-files" database (if not set MONGODB_HOST and MONGODB_PORT will be used)
 |REPLICA_SET_SMALLFILES (optional)  | replica-set for "linshare-bigfiles" database (if not set MONGODB_HOST and MONGODB_PORT will be used)
@@ -83,7 +87,7 @@ We add three mongodb environment variables in orther to specify the mongodb repl
 
 Each environment variable must be set like this: "ip-adress-of-first-mongodb:mongodb-port,ip-adress-of-second-mongodb:mongodb-port,...".
 
-For exemple if we had a replica-set of three mongodb replication for the "linshare-bigfiles" database we can add: 
+For exemple if we had a replica-set of three mongodb replication for the "linshare-bigfiles" database we can add:
 
 `REPLICA_SET=10.129.0.3:27017,10.129.0.4:27017,10.129.0.5:27017`
 
