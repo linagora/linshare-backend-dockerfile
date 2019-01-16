@@ -6,7 +6,6 @@ EXPOSE 8080
 
 ARG VERSION="2.1.3"
 ARG CHANNEL="releases"
-ARG EXT="com"
 
 ENV LINSHARE_VERSION=$VERSION
 
@@ -19,10 +18,10 @@ ENV THUMBNAIL_PORT=8080
 
 COPY GandiStandardSSLCA2.pem /usr/share/ca-certificates/linagora/GandiStandardSSLCA2.pem
 
-RUN URL="https://nexus.linagora.${EXT}/service/local/artifact/maven/content?r=linshare-${CHANNEL}&g=org.linagora.linshare&a=linshare-core&v=${VERSION}"; \
- wget --no-check-certificate --progress=bar:force:noscroll \
+RUN URL="https://nexus.linagora.com/service/local/artifact/maven/content?r=linshare-${CHANNEL}&g=org.linagora.linshare&a=linshare-core&v=${VERSION}"; \
+ wget --progress=bar:force:noscroll \
  -O webapps/linshare.war "${URL}&p=war" \
- && wget --no-check-certificate --progress=bar:force:noscroll \
+ && wget --progress=bar:force:noscroll \
  -O linshare.war.sha1 "${URL}&p=war.sha1" \
  && sed -i 's#^\(.*\)#\1\twebapps/linshare.war#' linshare.war.sha1 \
  && sha1sum -c linshare.war.sha1 --quiet && rm -f linshare.war.sha1 \
