@@ -6,7 +6,6 @@ EXPOSE 8080
 
 ARG VERSION="2.2.5"
 ARG CHANNEL="releases"
-ARG EXT="com"
 
 ENV LINSHARE_VERSION=$VERSION
 ENV START_DEBUG=0
@@ -28,8 +27,8 @@ ENV JWT_EXPIRATION=300 JWT_TOKEN_MAX_LIFETIME=300 SSO_IP_LIST="" SSO_IP_LIST_ENA
 RUN apt-get update && apt-get install -y --no-install-recommends unzip curl && apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ENV URL="https://nexus.linagora.${EXT}/service/local/artifact/maven/content?r=linshare-${CHANNEL}&g=org.linagora.linshare&a=linshare-core&v=${VERSION}"
-RUN curl -k -s "${URL}&p=war" -o webapps/linshare.war && curl -k -s "${URL}&p=war.sha1" -o linshare.war.sha1 \
+ENV URL="https://nexus.linagora.com/service/local/artifact/maven/content?r=linshare-${CHANNEL}&g=org.linagora.linshare&a=linshare-core&v=${VERSION}"
+RUN curl -s "${URL}&p=war" -o webapps/linshare.war && curl -s "${URL}&p=war.sha1" -o linshare.war.sha1 \
   && sed -i 's#^\(.*\)#\1\twebapps/linshare.war#' linshare.war.sha1 \
   && sha1sum -c linshare.war.sha1 && rm -f linshare.war.sha1 \
   && sed -i "/xom/i\jclouds-bouncycastle-1.9.2.jar,bcprov-*.jar,\\\ " /usr/local/tomcat/conf/catalina.properties
