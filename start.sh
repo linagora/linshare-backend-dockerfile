@@ -68,7 +68,6 @@ function check_env_variables ()
 
 g_vars_list="
 POSTGRES_HOST
-MONGODB_HOST
 SMTP_HOST
 "
 g_vars_list_opts="
@@ -76,15 +75,12 @@ POSTGRES_PORT
 POSTGRES_DATABASE
 POSTGRES_USER
 POSTGRES_PASSWORD
-MONGODB_PORT
 SMTP_PORT
 CLAMAV_HOST
 CLAMAV_PORT
 SMTP_AUTH_ENABLE
 SMTP_USER
 SMTP_PASSWORD
-MONGODB_USER
-MONGODB_PASSWORD
 STORAGE_MODE
 STORAGE_BUCKET
 STORAGE_FILESYSTEM_DIR
@@ -173,21 +169,6 @@ else
     sed -i 's@.*virusscanner.clamav.host.*@virusscanner.clamav.host=${CLAMAV_HOST}@' $target
     sed -i 's@.*virusscanner.clamav.port.*@virusscanner.clamav.port=${CLAMAV_PORT}@' $target
 
-    sed -i 's@linshare.mongo.host=.*@linshare.mongo.host=${MONGODB_HOST}@' $target
-    sed -i 's@linshare.mongo.gridfs.smallfiles.host=.*@linshare.mongo.gridfs.smallfiles.host=${MONGODB_HOST}@' $target
-    sed -i 's@linshare.mongo.gridfs.bigfiles.host=.*@linshare.mongo.gridfs.bigfiles.host=${MONGODB_HOST}@' $target
-    sed -i 's@linshare.mongo.port=.*@linshare.mongo.port=${MONGODB_PORT}@' $target
-    sed -i 's@linshare.mongo.gridfs.smallfiles.port=.*@linshare.mongo.gridfs.smallfiles.port=${MONGODB_PORT}@' $target
-    sed -i 's@linshare.mongo.gridfs.bigfiles.port=.*@linshare.mongo.gridfs.bigfiles.port=${MONGODB_PORT}@' $target
-
-    sed -i 's@linshare.mongo.user=.*@linshare.mongo.user=${MONGODB_USER}@' $target
-    sed -i 's@linshare.mongo.gridfs.smallfiles.user=.*@linshare.mongo.gridfs.smallfiles.user=${MONGODB_USER}@' $target
-    sed -i 's@linshare.mongo.gridfs.bigfiles.user=.*@linshare.mongo.gridfs.bigfiles.user=${MONGODB_USER}@' $target
-
-    sed -i 's@linshare.mongo.password=.*@linshare.mongo.password=${MONGODB_PASS}@' $target
-    sed -i 's@linshare.mongo.gridfs.smallfiles.password=.*@linshare.mongo.gridfs.smallfiles.password=${MONGODB_PASS}@' $target
-    sed -i 's@linshare.mongo.gridfs.bigfiles.password=.*@linshare.mongo.gridfs.bigfiles.password=${MONGODB_PASS}@' $target
-
     sed -i 's@linshare.mongo.client.uri=.*@linshare.mongo.client.uri=${MONGODB_URI}@' $target
     sed -i 's@linshare.mongo.gridfs.smallfiles.client.uri=.*@linshare.mongo.gridfs.smallfiles.client.uri=${MONGODB_URI_SMALLFILES}@' $target
     sed -i 's@linshare.mongo.gridfs.bigfiles.client.uri=.*@linshare.mongo.gridfs.bigfiles.client.uri=${MONGODB_URI_BIGFILES}@' $target
@@ -224,10 +205,6 @@ else
 
     echo -e "\n" >> $target
     echo -e "linshare.display.licenceTerm=${LICENSE:-true}\n" >> $target
-    echo -e 'linshare.mongo.replicatset=${REPLICA_SET}\n' >> $target
-    echo -e 'linshare.mongo.gridfs.bigfiles.replicatset=${REPLICA_SET_BIGFILES}\n' >> $target
-    echo -e 'linshare.mongo.gridfs.smallfiles.replicatset=${REPLICA_SET_SMALLFILES}\n' >> $target
-
 
 fi
 

@@ -48,17 +48,10 @@ You can configure the above related settings through the following environment v
 |POSTGRES_USER                      | postgres user
 |POSTGRES_PASSWORD                  | postgres password
 |POSTGRES_DATABASE                  | postgres database with default value "linshare"
-|MONGODB_HOST                       | mongodb host
-|MONGODB_PORT                       | mongodb port
-|MONGODB_USER                       | mongodb user
-|MONGODB_PASSWORD                   | mongodb password
 |MONGODB_URI                        | mongodb uri
 |MONGODB_URI_SMALLFILES             | mongodb uri for smallfiles
 |MONGODB_URI_BIGFILES               | mongodb uri for bigfiles
 |MONGODB_WRITE_CONCERN              | Available Write concern value: <ul><li>MAJORITY: waits on a majority of servers for the write operation</li> <li>JOURNALED: Write operations wait for the server to group commit to the journal file on disk</li> <li>ACKNOWLEDGED: Write operations that use this write concern will wait for acknowledgement,using the default write concern configured on the server</li> </ul>
-|REPLICA_SET (optional)             | replica-set for "linshare" database (if not set MONGODB_HOST and MONGODB_PORT will be used)
-|REPLICA_SET_BIGFILES (optional)    | replica-set for "linshare-files" database (if not set MONGODB_HOST and MONGODB_PORT will be used)
-|REPLICA_SET_SMALLFILES (optional)  | replica-set for "linshare-bigfiles" database (if not set MONGODB_HOST and MONGODB_PORT will be used)
 |SPRING_PROFILES_ACTIVE (optional)  | default value is 'default,jcloud,mongo'. To enable sso, use 'sso,jcloud,mongo'
 |SSO_IP_LIST_ENABLE                 | enable trusted list of sso server ip. (default=false)
 |SSO_IP_LIST (optional)             | Trusted list of sso server ip.  (default="")
@@ -83,13 +76,9 @@ You can configure the above related settings through the following environment v
 |LS_DEBUG                           | if equal to 1, it enables debug traces for LinShare (log4j configuration)
 <br/>
 
-We add three mongodb environment variables in orther to specify the mongodb replica-set for each database.
+To use mongo replica_set, please define your environment variable __MONGODB_URI**__ like this :
 
-Each environment variable must be set like this: "ip-adress-of-first-mongodb:mongodb-port,ip-adress-of-second-mongodb:mongodb-port,...".
-
-For exemple if we had a replica-set of three mongodb replication for the "linshare-bigfiles" database we can add:
-
-`REPLICA_SET=10.129.0.3:27017,10.129.0.4:27017,10.129.0.5:27017`
+   mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]
 
 New CA
 ------
