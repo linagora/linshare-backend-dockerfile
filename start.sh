@@ -144,7 +144,7 @@ if [ $custom_linshare -eq 1 ]; then
     echo -e "Custom linshare.properties found at ${conf_dir}"
     echo -e "Skipping configuration"
 else
-    echo -e "Configuring Linshare settings"
+    echo -e "Configuring LinShare settings"
 
     cp ${src_dir}/linshare.properties.sample ${conf_dir}/linshare.properties
 
