@@ -75,6 +75,8 @@ POSTGRES_PORT
 POSTGRES_DATABASE
 POSTGRES_USER
 POSTGRES_PASSWORD
+MONGODB_USER
+MONGODB_PASSWORD
 SMTP_PORT
 CLAMAV_HOST
 CLAMAV_PORT
@@ -169,9 +171,18 @@ else
     sed -i 's@.*virusscanner.clamav.host.*@virusscanner.clamav.host=${CLAMAV_HOST}@' $target
     sed -i 's@.*virusscanner.clamav.port.*@virusscanner.clamav.port=${CLAMAV_PORT}@' $target
 
-    sed -i 's@linshare.mongo.client.uri=.*@linshare.mongo.client.uri=${MONGODB_URI}@' $target
-    sed -i 's@linshare.mongo.gridfs.smallfiles.client.uri=.*@linshare.mongo.gridfs.smallfiles.client.uri=${MONGODB_URI_SMALLFILES}@' $target
-    sed -i 's@linshare.mongo.gridfs.bigfiles.client.uri=.*@linshare.mongo.gridfs.bigfiles.client.uri=${MONGODB_URI_BIGFILES}@' $target
+    if [ -z "${MONGODB_PASSWORD}" ] ; then
+        sed -i 's@linshare.mongo.client.uri=.*@linshare.mongo.client.uri=${MONGODB_URI}@' $target
+        sed -i 's@linshare.mongo.gridfs.smallfiles.client.uri=.*@linshare.mongo.gridfs.smallfiles.client.uri=${MONGODB_URI_SMALLFILES}@' $target
+        sed -i 's@linshare.mongo.gridfs.bigfiles.client.uri=.*@linshare.mongo.gridfs.bigfiles.client.uri=${MONGODB_URI_BIGFILES}@' $target
+    else
+        MONGODB_URI="${MONGODB_URI/mongodb:\/\//}"
+        MONGODB_URI_SMALLFILES="${MONGODB_URI_SMALLFILES/mongodb:\/\//}"
+        MONGODB_URI_BIGFILES="${MONGODB_URI_BIGFILES/mongodb:\/\//}"
+        sed -i 's@^linshare.mongo.client.uri=.*@linshare.mongo.client.uri=mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}\@${MONGODB_URI}@' $target
+        sed -i 's@^linshare.mongo.gridfs.smallfiles.client.uri=.*@linshare.mongo.gridfs.smallfiles.client.uri=mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}\@${MONGODB_URI_SMALLFILES}@' $target
+        sed -i 's@^linshare.mongo.gridfs.bigfiles.client.uri=.*@linshare.mongo.gridfs.bigfiles.client.uri=mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}\@${MONGODB_URI_BIGFILES}@' $target
+    fi
 
     sed -i 's@linshare.mongo.write.concern=.*@linshare.mongo.write.concern=${MONGODB_WRITE_CONCERN}@' $target
 
