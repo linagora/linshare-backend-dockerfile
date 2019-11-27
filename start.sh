@@ -60,15 +60,29 @@ function check_env_variables ()
     done
     if [ ${l_error} -eq 1 ] ; then
         echo "ERROR: Missing some input variables"
+        echo
         exit 1
     fi
     [ ${l_legend} -eq 1 ] && echo -e "INFO:${g_prog_name}: All env variables checked\n"
     return ${l_error}
 }
 
+function check_deprecated_env_variables ()
+{
+    local l_key=$1
+    local l_new_key=$2
+    if [ ! -z ${!l_key} ] ; then
+        echo "ERROR: ${l_key} is not supported anymore. See ${l_new_key}"
+        echo
+        exit 1
+    fi
+}
+
 g_vars_list="
 POSTGRES_HOST
 SMTP_HOST
+MONGODB_DATA_REPLICA_SET
+MONGODB_SMALLFILES_REPLICA_SET
 "
 g_vars_list_opts="
 POSTGRES_PORT
@@ -88,6 +102,12 @@ JWT_EXPIRATION
 JWT_TOKEN_MAX_LIFETIME
 SSO_IP_LIST_ENABLE
 SSO_IP_LIST
+MONGODB_HOST
+MONGODB_PORT
+MONGODB_URI
+MONGODB_URI_SMALLFILES
+MONGODB_URI_BIGFILES
+MONGODB_BIGFILES_REPLICA_SET
 "
 
 # MAIN
@@ -96,6 +116,13 @@ SSO_IP_LIST
 
 check_env_variables 1 1 ${g_vars_list}
 check_env_variables 0 1 ${g_vars_list_opts}
+
+check_deprecated_env_variables MONGODB_URI MONGODB_DATA_REPLICA_SET
+check_deprecated_env_variables MONGODB_URI_SMALLFILES MONGODB_SMALLFILES_REPLICA_SET
+check_deprecated_env_variables MONGODB_URI_BIGFILES MONGODB_BIGFILES_REPLICA_SET
+check_deprecated_env_variables MONGODB_HOST MONGODB_DATA_REPLICA_SET
+check_deprecated_env_variables MONGODB_PORT MONGODB_DATA_REPLICA_SET
+
 if [ "${STORAGE_MODE}" != "filesystem" ] ; then
     echo
     echo "INFO: STORAGE_MODE is different than filesystem"
@@ -150,10 +177,6 @@ else
 
     target="${conf_dir}/linshare.properties"
 
-    #[ -z "$SMTP_USER" ] || sed -i 's@mail.smtp.user.*@mail.smtp.user=${SMTP_USER}@' $target
-    #[ -z "$SMTP_PASSWORD" ] || sed -i 's@mail.smtp.password.*@mail.smtp.password=${SMTP_PASSWORD}@' $target
-    #[ -z "$SMTP_AUTH_ENABLE" ]  || sed -i 's@mail.smtp.auth.needed.*@mail.smtp.auth.needed=${SMTP_AUTH_ENABLE}@' $target
-
     sed -i 's@mail.smtp.host.*@mail.smtp.host=${SMTP_HOST}@' $target
     sed -i 's@mail.smtp.port.*@mail.smtp.port=${SMTP_PORT}@' $target
     sed -i 's@mail.smtp.auth.needed.*@mail.smtp.auth.needed=${SMTP_AUTH_ENABLE}@' $target
@@ -169,9 +192,14 @@ else
     sed -i 's@.*virusscanner.clamav.host.*@virusscanner.clamav.host=${CLAMAV_HOST}@' $target
     sed -i 's@.*virusscanner.clamav.port.*@virusscanner.clamav.port=${CLAMAV_PORT}@' $target
 
-    sed -i 's@linshare.mongo.client.uri=.*@linshare.mongo.client.uri=${MONGODB_URI}@' $target
-    sed -i 's@linshare.mongo.gridfs.smallfiles.client.uri=.*@linshare.mongo.gridfs.smallfiles.client.uri=${MONGODB_URI_SMALLFILES}@' $target
-    sed -i 's@linshare.mongo.gridfs.bigfiles.client.uri=.*@linshare.mongo.gridfs.bigfiles.client.uri=${MONGODB_URI_BIGFILES}@' $target
+    sed -i -r 's/(linshare.mongo.data.replicaset=).*/\1${MONGODB_DATA_REPLICA_SET}/g' $target
+    sed -i -r 's/(linshare.mongo.data.database=).*/\1${MONGODB_DATA_DATABASE}/g' $target
+
+    sed -i -r 's/(linshare.mongo.smallfiles.replicaset=).*/\1${MONGODB_SMALLFILES_REPLICA_SET}/g' $target
+    sed -i -r 's/(linshare.mongo.smallfiles.database=).*/\1${MONGODB_SMALLFILES_DATABASE}/g' $target
+
+    sed -i -r 's/(linshare.mongo.bigfiles.replicaset=).*/\1${MONGODB_BIGFILES_REPLICA_SET}/g' $target
+    sed -i -r 's/(linshare.mongo.bigfiles.database=).*/\1${MONGODB_BIGFILES_DATABASE}/g' $target
 
     sed -i 's@linshare.mongo.write.concern=.*@linshare.mongo.write.concern=${MONGODB_WRITE_CONCERN}@' $target
 
