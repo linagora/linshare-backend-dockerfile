@@ -102,12 +102,10 @@ JWT_EXPIRATION
 JWT_TOKEN_MAX_LIFETIME
 SSO_IP_LIST_ENABLE
 SSO_IP_LIST
-MONGODB_HOST
-MONGODB_PORT
-MONGODB_URI
-MONGODB_URI_SMALLFILES
-MONGODB_URI_BIGFILES
 MONGODB_BIGFILES_REPLICA_SET
+MONGODB_USER
+MONGODB_PASSWORD
+MONGODB_AUTH_DATABASE
 "
 
 # MAIN
@@ -200,6 +198,12 @@ else
 
     sed -i -r 's/(linshare.mongo.bigfiles.replicaset=).*/\1${MONGODB_BIGFILES_REPLICA_SET}/g' $target
     sed -i -r 's/(linshare.mongo.bigfiles.database=).*/\1${MONGODB_BIGFILES_DATABASE}/g' $target
+
+    if [ ! -z "${MONGODB_PASSWORD}" ] ; then
+        sed -i -r 's/(linshare.mongo.data.credentials=).*/\1${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_AUTH_DATABASE}/g' $target
+        sed -i -r 's/(linshare.mongo.smallfiles.credentials=).*/\1${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_AUTH_DATABASE}/g' $target
+        sed -i -r 's/(linshare.mongo.bigfiles.credentials=).*/\1${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_AUTH_DATABASE}/g' $target
+    fi
 
     sed -i 's@linshare.mongo.write.concern=.*@linshare.mongo.write.concern=${MONGODB_WRITE_CONCERN}@' $target
 
