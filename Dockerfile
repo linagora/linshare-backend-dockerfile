@@ -12,6 +12,9 @@ ENV START_DEBUG=0
 
 COPY GandiStandardSSLCA2.pem /usr/share/ca-certificates/linagora/GandiStandardSSLCA2.pem
 
+ENV JAVA_XMS=512m
+ENV JAVA_XMX=1536m
+
 ENV POSTGRES_HOST="" POSTGRES_PORT=5432 POSTGRES_DATABASE=linshare POSTGRES_USER=linshare POSTGRES_PASSWORD=linshare
 ENV MONGODB_URI=mongodb://mongodb/linshare MONGODB_URI_SMALLFILES=mongodb://mongodb/linshare-files
 ENV MONGODB_URI_BIGFILES=mongodb://mongodb/linshare-bigfiles
