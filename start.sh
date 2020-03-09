@@ -106,6 +106,7 @@ MONGODB_BIGFILES_REPLICA_SET
 MONGODB_USER
 MONGODB_PASSWORD
 MONGODB_AUTH_DATABASE
+OS_TENANT_NAME
 "
 
 # MAIN
@@ -123,12 +124,15 @@ check_deprecated_env_variables MONGODB_PORT MONGODB_DATA_REPLICA_SET
 
 if [ "${STORAGE_MODE}" != "filesystem" ] ; then
     echo
-    echo "INFO: STORAGE_MODE is different than filesystem"
+    echo "INFO: STORAGE_MODE is different than filesystem: ${STORAGE_MODE}"
     echo "INFO: Checking object storage configuration ..."
     if [ "${STORAGE_MODE}" == "s3" ] ; then
         check_env_variables 1 0 AWS_AUTH_URL AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
     else
-        check_env_variables 1 0 OS_AUTH_URL OS_TENANT_ID OS_TENANT_NAME OS_USERNAME OS_PASSWORD OS_REGION_NAME
+        check_env_variables 1 0 OS_AUTH_URL OS_USERNAME OS_PASSWORD OS_REGION_NAME
+        if [ "${OS_IDENTITY_API_VERSION}" == "3" ] ; then
+            check_env_variables 1 0 OS_USER_DOMAIN_NAME OS_PROJECT_NAME
+        fi
     fi
         echo "INFO: Object storage configuration checked"
     echo
@@ -212,6 +216,7 @@ else
 
     sed -i 's@linshare.documents.storage.mode=.*@linshare.documents.storage.mode=${STORAGE_MODE}@' $target
     sed -i 's@linshare.documents.storage.bucket=.*@linshare.documents.storage.bucket=${STORAGE_BUCKET}@' $target
+    sed -i 's@linshare.documents.storage.multipartupload=.*@linshare.documents.storage.multipartupload=${STORAGE_MULTIPART_UPLOAD}@' $target
     sed -i 's@linshare.documents.storage.filesystem.directory=.*@linshare.documents.storage.filesystem.directory=${STORAGE_FILESYSTEM_DIR}@' $target
 
     if [ "${STORAGE_MODE}" != "filesystem" ] ; then
@@ -220,10 +225,16 @@ else
             sed -i 's@linshare.documents.storage.credential=.*@linshare.documents.storage.credential=${AWS_SECRET_ACCESS_KEY}@' $target
             sed -i 's@linshare.documents.storage.endpoint=.*@linshare.documents.storage.endpoint=${AWS_AUTH_URL}@' $target
         else
-            sed -i 's@linshare.documents.storage.identity=.*@linshare.documents.storage.identity=${OS_TENANT_NAME}:${OS_USERNAME}@' $target
+            sed -i 's@linshare.documents.storage.keystone.version=.*@linshare.documents.storage.keystone.version=${OS_IDENTITY_API_VERSION}@' $target
+            if [ ! -z ${OS_TENANT_NAME} ] ; then
+                sed -i 's@linshare.documents.storage.identity=.*@linshare.documents.storage.identity=${OS_TENANT_NAME}:${OS_USERNAME}@' $target
+            fi
+            sed -i 's@linshare.documents.storage.project.name=.*@linshare.documents.storage.project.name=${OS_PROJECT_NAME}@' $target
+            sed -i 's@linshare.documents.storage.user.domain=.*@linshare.documents.storage.user.domain=${OS_USER_DOMAIN_NAME}@' $target
+            sed -i 's@linshare.documents.storage.user.name=.*@linshare.documents.storage.user.name=${OS_USERNAME}@' $target
             sed -i 's@linshare.documents.storage.credential=.*@linshare.documents.storage.credential=${OS_PASSWORD}@' $target
             sed -i 's@linshare.documents.storage.endpoint=.*@linshare.documents.storage.endpoint=${OS_AUTH_URL}@' $target
-            sed -i 's@# linshare.documents.storage.regionId=.*@linshare.documents.storage.regionId=${OS_REGION_NAME}@' $target
+            sed -i 's@linshare.documents.storage.regionId=.*@linshare.documents.storage.regionId=${OS_REGION_NAME}@' $target
         fi
     fi
 

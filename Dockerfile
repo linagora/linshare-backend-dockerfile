@@ -36,6 +36,8 @@ ENV SMTP_HOST="" SMTP_PORT=25 SMTP_USER="" SMTP_PASSWORD="" SMTP_AUTH_ENABLE=fal
 ENV SMTP_START_TLS_ENABLE=false SMTP_SSL_ENABLE=false
 ENV STORAGE_MODE=filesystem STORAGE_BUCKET=linshare-data STORAGE_FILESYSTEM_DIR=/var/lib/linshare/filesystemstorage
 ENV JWT_EXPIRATION=300 JWT_TOKEN_MAX_LIFETIME=300 SSO_IP_LIST="" SSO_IP_LIST_ENABLE=false
+ENV STORAGE_MULTIPART_UPLOAD=true
+ENV OS_IDENTITY_API_VERSION=2
 
 RUN apt-get update && apt-get install -y --no-install-recommends unzip curl && apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

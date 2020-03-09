@@ -55,18 +55,7 @@ You can configure the above related settings through the following environment v
 |SPRING_PROFILES_ACTIVE (optional)  | default value is 'default,jcloud,mongo'. To enable sso, use 'sso,jcloud,mongo'
 |SSO_IP_LIST_ENABLE                 | enable trusted list of sso server ip. (default=false)
 |SSO_IP_LIST (optional)             | Trusted list of sso server ip.  (default="")
-|STORAGE_MODE                       | Available storage mode: <ul><li>filesystem : storing documents on file system<br/>**dependent variables:**<ul><li>`STORAGE_BUCKET`</li><li>`STORAGE_FILESYSTEM_DIR`</li> </ul> <li>swift-keystone: storing documents into swift<br/>**dependent variables:** <ul> <li>`STORAGE_BUCKET`</li> <li>`OS_AUTH_URL`</li> <li>`OS_TENANT_ID`</li> <li>`OS_TENANT_NAME`</li> <li>`OS_USERNAME`</li> <li>`OS_PASSWORD`</li> </ul> </li> <li>openstack-swift: storing documents into swift with region support<br/>**dependent variables:** <ul> <li>`STORAGE_BUCKET`</li> <li>`OS_AUTH_URL`</li> <li>`OS_TENANT_ID`</li> <li>`OS_TENANT_NAME`</li> <li>`OS_USERNAME`</li> <li>`OS_PASSWORD`</li> <li>`OS_REGION_ID`</li> </ul> </li> <li>s3: storing documents into swift<br/>**dependent variables:** <ul> <li>`STORAGE_BUCKET`</li> <li>`AWS_AUTH_URL`</li> <li>`AWS_ACCESS_KEY_ID`</li> <li>`AWS_SECRET_ACCESS_KEY`</li> </ul> </li> </ul>
-|STORAGE_BUCKET                     | storage bucket id; default: *linshare-data* (old value was *e0531829-8a75-49f8-bb30-4539574d66c7*)
-|STORAGE_FILESYSTEM_DIR             | storage filesystem directory; default: */var/lib/linshare/filesystemstorage*
-|OS_AUTH_URL                        | storage swift endpoint e.g.: *http://127.0.0.1:5000/v2.0*
-|OS_TENANT_ID                       | storage swift tenant id
-|OS_TENANT_NAME                     | storage swift tenant name
-|OS_USERNAME                        | storage swift username
-|OS_PASSWORD                        | storage swift password
-|OS_REGION_ID (optional)            | Region ID is required only with openstack-swift.
-|AWS_AUTH_URL                       | Endpoint of S3 server : ex: https://s3.amazonaws.com
-|AWS_ACCESS_KEY_ID                  | S3 access key
-|AWS_SECRET_ACCESS_KEY              | S3 secret access key
+|STORAGE_MODE                       | Available [storage mode](#available-storage-modes)
 |THUMBNAIL_ENABLE (optional)        | By default it is disabled : false|true
 |THUMBNAIL_HOST (optional)          | Thumbnail host : thumbnail-server
 |THUMBNAIL_PORT (optional)          | Thumbnail port : 8080
@@ -75,6 +64,49 @@ You can configure the above related settings through the following environment v
 |START_DEBUG                        | if equal to 1, additionnal debug traces will be displayed.
 |LS_DEBUG                           | if equal to 1, it enables debug traces for LinShare (log4j configuration)
 <br/>
+
+
+### <a>Available storage modes</a>
+
+| STORAGE_MODE=filesystem           | storing documents on file system
+|-----------------------------------|---------------------------------------------------------------------------------------------------
+| STORAGE_BUCKET                    | storage bucket id; default: *linshare-data* (old value was *e0531829-8a75-49f8-bb30-4539574d66c7*)
+| STORAGE_FILESYSTEM_DIR            | storage filesystem directory; default: */var/lib/linshare/filesystemstorage*
+
+
+| STORAGE_MODE=swift-keystone       | storing documents into swift
+|-----------------------------------|---------------------------------------------------------------------------------------------------
+| STORAGE_BUCKET                    | storage bucket id; default: *linshare-data* (old value was *e0531829-8a75-49f8-bb30-4539574d66c7*)
+| STORAGE_MULTIPART_UPLOAD          | uploading file to ObjectStorage using multipart chunking. Default: true
+| OS_AUTH_URL                       |
+| OS_TENANT_NAME                    |
+| OS_USERNAME                       |
+| OS_PASSWORD                       |
+
+
+| STORAGE_MODE=openstack-swift      | storing documents into swift with region support
+|-----------------------------------|---------------------------------------------------------------------------------------------------
+| STORAGE_BUCKET                    | storage bucket id; default: *linshare-data* (old value was *e0531829-8a75-49f8-bb30-4539574d66c7*)
+| STORAGE_MULTIPART_UPLOAD          | uploading file to ObjectStorage using multipart chunking. Default: true
+| OS_IDENTITY_API_VERSION           | Default: 2. Values: 2 or 3
+| OS_AUTH_URL                       | ex: *https://auth.cloud.ovh.net/v2.0/* or *https://auth.cloud.ovh.net/v3*
+| OS_TENANT_ID                      | required if api version v2
+| OS_TENANT_NAME                    | required if api version v2
+| OS_USERNAME                       |
+| OS_PASSWORD                       |
+| OS_REGION_NAME                    |
+| OS_PROJECT_NAME                   | required if api version v3
+| OS_USER_DOMAIN_NAME               | required if api version v3
+
+
+| STORAGE_MODE=s3                   | storing documents into Amazon s3 (tested with minio)
+|-----------------------------------|---------------------------------------------------------------------------------------------------
+| STORAGE_BUCKET                    | storage bucket id; default: *linshare-data* (old value was *e0531829-8a75-49f8-bb30-4539574d66c7*)
+| STORAGE_MULTIPART_UPLOAD          | uploading file to ObjectStorage using multipart chunking. Default: true
+| AWS_AUTH_URL                      | Endpoint of S3 server : ex: https://s3.amazonaws.com
+| AWS_ACCESS_KEY_ID                 | S3 access key
+| AWS_SECRET_ACCESS_KEY             | S3 secret access key
+
 
 To use mongo replica_set, please define your environment variable __MONGODB_URI**__ like this :
 
