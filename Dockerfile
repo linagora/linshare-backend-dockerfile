@@ -37,4 +37,5 @@ RUN curl -s "${URL}&p=war" -o webapps/linshare.war && curl -s "${URL}&p=war.sha1
 
 COPY start.sh /usr/local/bin/start.sh
 
+ENV LINSHARE_PRODUCTION_MODE=TRUE
 CMD ["/usr/local/bin/start.sh"]
