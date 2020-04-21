@@ -293,4 +293,9 @@ fi
 echo "linagora/GandiStandardSSLCA2.pem" >> /etc/ca-certificates.conf
 update-ca-certificates
 
+if [ "${LINSHARE_PRODUCTION_MODE}" -eq "TRUE" ] ; then
+    sed -i -e '/<session-config>/ a\        <tracking-mode>COOKIE</tracking-mode>' /usr/local/tomcat/conf/web.xml
+    sed -i -e '/<\/Host>/ i\        <Valve className="org.apache.catalina.valves.ErrorReportValve" showServerInfo="false" showReport="false" />' /usr/local/tomcat/conf/server.xml
+fi
+
 exec /usr/local/tomcat/bin/catalina.sh run
