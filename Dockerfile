@@ -1,4 +1,4 @@
-FROM tomcat:8-jre8-slim
+FROM tomcat:8-jdk8-openjdk-slim
 
 MAINTAINER LinShare <linshare@linagora.com>
 
