@@ -8,6 +8,12 @@ What is Linshare?
 
 Open Source secure files sharing application, LinShare is an easy solution to make dematerialized exchanges. For businesses which want confidentiality, and traceability for their file exchanges. LinShare is a libre and free, ergonomic and intuitive software, for transferring large files.
 
+Older versions
+--------------
+
+* [LinShare 2.3](https://github.com/linagora/linshare-backend-dockerfile/tree/maintenance-2.3.x)
+* [LinShare 2.2](https://github.com/linagora/linshare-backend-dockerfile/tree/maintenance-2.2.x)
+
 Functionalities
 ---------------
 
@@ -48,11 +54,15 @@ You can configure the above related settings through the following environment v
 |POSTGRES_USER                      | postgres user
 |POSTGRES_PASSWORD                  | postgres password
 |POSTGRES_DATABASE                  | postgres database with default value "linshare"
-|MONGODB_URI                        | mongodb uri
-|MONGODB_URI_SMALLFILES             | mongodb uri for smallfiles
-|MONGODB_URI_BIGFILES               | mongodb uri for bigfiles
+|MONGODB_DATA_DATABASE              | LinShare database name, default: linshare
+|MONGODB_DATA_REPLICA_SET           | mongodb replica set value, format: host1[:port1][,host2[:port2],...[,hostN[:portN]]][?options]]<br/>ex: mongo-host-1:27017,mongo-host-2:27017,mongo-host-3:27017?replicaSet=rs0
+|MONGODB_SMALLFILES_DATABASE        | LinShare database name for thumbnail storage, default: linshare-files
+|MONGODB_SMALLFILES_REPLICA_SET     | mongodb replica set value for smallfiles, format: host1[:port1][,host2[:port2],...[,hostN[:portN]]][?options]]
+|MONGODB_USER                       | user, default: linshare
+|MONGODB_PASSWORD                   | enable authentication if defined.
+|MONGODB_AUTH_DATABASE              | Authentication database, default: admin
 |MONGODB_WRITE_CONCERN              | Available Write concern value: <ul><li>MAJORITY: waits on a majority of servers for the write operation</li> <li>JOURNALED: Write operations wait for the server to group commit to the journal file on disk</li> <li>ACKNOWLEDGED: Write operations that use this write concern will wait for acknowledgement,using the default write concern configured on the server</li> </ul>
-|SPRING_PROFILES_ACTIVE (optional)  | default value is 'default,jcloud,mongo'. To enable sso, use 'sso,jcloud,mongo'
+|SPRING_PROFILES_ACTIVE (optional)  | default value is 'default,jcloud,batches'. To enable sso, use 'sso,jcloud,batches'
 |SSO_IP_LIST_ENABLE                 | enable trusted list of sso server ip. (default=false)
 |SSO_IP_LIST (optional)             | Trusted list of sso server ip.  (default="")
 |STORAGE_MODE                       | Available [storage mode](#available-storage-modes)
@@ -65,6 +75,10 @@ You can configure the above related settings through the following environment v
 |LS_DEBUG                           | if equal to 1, it enables debug traces for LinShare (log4j configuration)
 <br/>
 
+| Deprecated Environment variable              | Description
+|-----------------------------------|---------------------------------------------------------------------------------------------------
+|MONGODB_URI                        | mongodb uri (Deprecated, LinShare 2.3 and below)
+|MONGODB_URI_SMALLFILES             | mongodb uri for smallfiles (Deprecated, LinShare 2.3 and below)
 
 ### <a>Available storage modes</a>
 
@@ -108,10 +122,6 @@ You can configure the above related settings through the following environment v
 | AWS_SECRET_ACCESS_KEY             | S3 secret access key
 
 
-To use mongo replica_set, please define your environment variable __MONGODB_URI**__ like this :
-
-   mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]
-
 New CA
 ------
 
@@ -134,6 +144,10 @@ And if any changes are necessary you can set the new values by passing them as f
 $ docker run -it --rm -p 8080:8080 \
 -e SMTP_HOST=smtp.linshare.com \
 -e SMTP_PORT=25 \
+-e MONGODB_DATA_REPLICA_SET=mongodb.linshare.com:27017 \
+-e MONGODB_SMALLFILES_REPLICA_SET=mongodb.linshare.com:27017 \
+-e MONGODB_USER=linshare \
+-e MONGODB_PASSWORD=linshare \
 -e POSTGRES_HOST=postgres.linshare.com \
 -e POSTGRES_USER=linshare \
 -e POSTGRES_PASSWORD=linshare \
@@ -151,7 +165,7 @@ Data persistency on Docker host is provided by the Docker volume runtime flag (-
 To enable it, at any time, run this image like as in the following example :
 
 ```console
-$ docker run -d -p 8080:8080 -v /var/lib/linshare:/var/lib/linshare linagora/linshare-backend:1.11.4
+$ docker run -d -p 8080:8080 -v /var/lib/linshare:/var/lib/linshare linagora/linshare-backend:4.0.0
 ```
 
 Build
