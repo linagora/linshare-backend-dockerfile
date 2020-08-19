@@ -123,11 +123,7 @@ data_dir=/var/lib/linshare
 
 # Allow to tweak JVM settings
 [ -z "$JAVA_OPTS" ] || java_opts="$JAVA_OPTS"
-export JAVA_OPTS="-Djava.awt.headless=true -Xms${JAVA_XMS} -Xmx${JAVA_XMX}
-                  -XX:+UseConcMarkSweepGC
-                  -Dlinshare.config.path=file:${conf_dir}/
-                  -Dlog4j.configuration=file:${conf_dir}/log4j.properties
-                  ${java_opts}"
+export JAVA_OPTS="-Djava.awt.headless=true -Xms${JAVA_XMS} -Xmx${JAVA_XMX} -XX:+UseConcMarkSweepGC -Dlinshare.config.path=file:${conf_dir}/ -Dlog4j.configuration=file:${conf_dir}/log4j.properties ${java_opts}"
 
 # Extracting .war's files
 unzip -o -qq webapps/linshare.war -d webapps/linshare
