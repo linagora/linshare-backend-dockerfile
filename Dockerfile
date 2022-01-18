@@ -4,7 +4,7 @@ MAINTAINER LinShare <linshare@linagora.com>
 
 EXPOSE 8080
 
-ARG VERSION="5.0.0-rc1-1"
+ARG VERSION="5.0.0-rc2"
 ARG CHANNEL="releases"
 
 ENV LINSHARE_VERSION=$VERSION
