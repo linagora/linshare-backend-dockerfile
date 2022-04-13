@@ -203,10 +203,10 @@ User Feedback
 Documentation
 -------------
 
-Official Linshare documentation is available here : [Linshare Configuration Guide (pdf format)](http://download.linshare.org/documentation/admins/Linagora_DOC_LinShare-1.7.0_Guide-Config-Admin_fr_20150303.pdf).
+Official Linshare documentation is available here : [Linshare Documentation Guide](https://github.com/linagora/linshare/tree/master/documentation/EN).
 
 
 Issues
 ------
 
-If you have any problems with or questions about this image, please contact us through a [GitHub issue](https://github.com/linagora/linshare-backend/issues).
+If you have any problems with or questions about this image, please contact us through a [GitHub issue](https://github.com/linagora/linshare-backend-dockerfile/issues).
