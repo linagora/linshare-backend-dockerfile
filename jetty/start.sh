@@ -113,7 +113,7 @@ data_dir=/var/lib/linshare
 export JAVA_OPTS="-Djava.awt.headless=true -Xms512m -Xmx1536m
                   -XX:+UseConcMarkSweepGC
                   -Dlinshare.config.path=file:${conf_dir}/
-                  -Dlog4j.configuration=file:${conf_dir}/log4j.properties
+                  -Dlog4j.configuration=file:${conf_dir}/log4j2.properties
                   ${java_opts}"
 
 # Extracting .war's files
@@ -131,7 +131,7 @@ custom_log4j=0
 
 # Copying configuration files for later customization
 [ -f "${conf_dir}/linshare.properties" ] && custom_linshare=1
-[ -f "${conf_dir}/log4j.properties" ] && custom_log4j=1
+[ -f "${conf_dir}/log4j2.properties" ] && custom_log4j=1
 
 if [ $custom_linshare -eq 1 ]; then
     echo -e "Custom linshare.properties found at ${conf_dir}"
@@ -223,10 +223,10 @@ if [ $custom_log4j -eq 1 ]; then
 else
     echo -e "Configuring Log4j settings"
 
-    cp ${src_dir}/log4j.properties ${conf_dir}/log4j.properties
+    cp ${src_dir}/log4j2.properties ${conf_dir}/log4j2.properties
 
     if [ ${LS_DEBUG} -eq 1 ] ; then
-        sed -i "s@log4j.category.org.linagora.linshare=.*@log4j.category.org.linagora.linshare=debug@" ${conf_dir}/log4j.properties
+        sed -i "s@logger.linshare =.*@logger.linshare = DEBUG, CONSOLE@" ${conf_dir}/log4j2.properties
     fi
 fi
 
