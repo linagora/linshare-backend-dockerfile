@@ -148,7 +148,7 @@ data_dir=/var/lib/linshare
 [ -z "$JDK_JAVA_OPTIONS" ] || java_opts="$JDK_JAVA_OPTIONS"
 export JDK_JAVA_OPTIONS="-Djava.awt.headless=true -Xms${JAVA_XMS} -Xmx${JAVA_XMX}
                   -Dlinshare.config.path=file:${conf_dir}/
-                  -Dlog4j.configuration=file:${conf_dir}/log4j2.properties
+                  -Dlog4j2.configurationFile=file:${conf_dir}/log4j2.properties
                   ${java_opts}"
 
 # Extracting .war's files
