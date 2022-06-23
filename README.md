@@ -73,6 +73,7 @@ You can configure the above related settings through the following environment v
 |JWT_TOKEN_MAX_LIFETIME (optional)  | Jwt token max lifetime : 300
 |START_DEBUG                        | if equal to 1, additionnal debug traces will be displayed.
 |LS_DEBUG                           | if equal to 1, it enables debug traces for LinShare (log4j configuration)
+|LOG4J2_APPENDER                    | defines the Log4J appender used for logging (default=CONSOLE, available values: CONSOLE, CONSOLE_JSON & LINSHARE)
 <br/>
 
 | Deprecated Environment variable              | Description
