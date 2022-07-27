@@ -1,4 +1,4 @@
-FROM tomcat:9.0-jdk11-openjdk-slim
+FROM tomcat:9-jre11-openjdk-bullseye
 
 MAINTAINER LinShare <linshare@linagora.com>
 
