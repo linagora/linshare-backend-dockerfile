@@ -49,6 +49,27 @@ RUN curl -s "${URL}&p=war" -o webapps/linshare.war && curl -s "${URL}&p=war.sha1
   && sed -i "/xom/i\jclouds-bouncycastle-1.9.2.jar,bcprov-*.jar,\\\ " /usr/local/tomcat/conf/catalina.properties
 
 COPY start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+
+# Non-root user and ownership for paths start.sh / Tomcat writes to
+RUN groupadd -r -g 1000 tomcat \
+ && useradd -r -u 1000 -g tomcat -d /nonexistent -s /usr/sbin/nologin tomcat \
+ && mkdir -p /etc/linshare /var/lib/linshare \
+ && chown -R tomcat:tomcat /etc/linshare /var/lib/linshare /usr/local/tomcat /usr/local/bin/start.sh
+
+# Remove the sudo package if present (cleaner than rm — package-aware, no-op
+# if not installed); strip setuid/setgid bits from binaries that ship in
+# essential packages we can't uninstall without breaking the base system
+# (su is in util-linux, passwd in the passwd package — both essential, but
+# stripping the setuid bit makes them harmless to a non-root caller); lock
+# the root account.
+RUN apt-get update \
+ && apt-get -y --purge remove sudo \
+ && apt-get clean && rm -rf /var/lib/apt/lists/* \
+ && ( find / -xdev -perm /6000 -type f -exec chmod a-s {} \; || true ) \
+ && passwd -l root
+
+USER tomcat:tomcat
 
 ENV LINSHARE_PRODUCTION_MODE=TRUE
 CMD ["/usr/local/bin/start.sh"]
